@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import SandboxPill from "./SandboxPill";
+import { useAnalytics } from "../lib/analytics";
 
 type Cat = "ai" | "sports" | "tooling" | "production" | "healthcare" | "brand" | "fintech";
 
@@ -14,13 +16,52 @@ type Project = {
   cats: Cat[];
   caseStudy?: string;
   featured?: boolean;
+  hasLiveDemo?: boolean;
+  status?: "live" | "rebuilding";
 };
 
 const PROJECTS: Project[] = [
   // FEATURED CASE STUDIES
   {
+    title: "NBA Predict Pro",
+    tagline: "Triangulates ML, sportsbook, and Polymarket signals for NBA games. Educational only.",
+    description:
+      "A Python ML pipeline that fits a calibrated voting + stacking ensemble (logistic, random forest, XGBoost) on multi season NBA data, then triangulates its prediction with sportsbook de vigged implied probability and Polymarket YES prices. Walk forward TimeSeriesSplit CV, isotonic / sigmoid calibration, Brier score 0.218 on the stacking ensemble. Llama 3.3 70B (via Groq) explains every prediction in plain English and surfaces the biggest risk factor. Divergence between the three independent signals is the actual product. The tool DOES NOT execute bets. Companion Next.js 15 web visualizer.",
+    chips: ["Python", "scikit learn", "XGBoost", "Polymarket", "Groq", "Llama 3.3"],
+    href: "https://github.com/whodeanie/nba-predict-pro",
+    label: "View repo",
+    cats: ["sports", "ai", "production"],
+    featured: true,
+    status: "rebuilding",
+  },
+  {
+    title: "Track & Field + Speed Coaching",
+    tagline: "Jumps, sprints, and speed work for athletes in any sport. Workout generator, technique analyzer, and 1:1 sessions.",
+    description:
+      "A four feature coaching app for jumpers and sprinters. The workout generator drafts a 4 week training block matched to event, level, phase, and days per week with concrete sets, reps, and intensities. The technique analyzer takes a plain language description and returns root cause hypotheses, real drill prescriptions, cue language by phase, and what to film. Ask Kerry is a free text Q&A grounded in Kerry's Iowa Hawkeyes background (long jump 7.00m, triple jump 14.84m, top 10 all time at Iowa in TJ). The 1:1 CTA routes coaching inquiries through the contact form. Click and try every feature with no signup.",
+    chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "Track & Field"],
+    href: "/coach/",
+    label: "Open coaching",
+    cats: ["sports", "ai"],
+    featured: true,
+    hasLiveDemo: true,
+  },
+  {
+    title: "Track Meet Tracker",
+    tagline: "Find out which track and field meets are on tonight. NCAA, USATF, Diamond League, World Athletics.",
+    description:
+      "A fan facing schedule for elite track and field. The same way ESPN tells you what NFL games are on tonight, this tells you which track meets are happening this week and next week, where to watch them, and which athletes are worth showing up for. NCAA conference championships and regionals, USATF tune ups, Diamond League stops, World Athletics Continental Tour Gold meets, and the major championships when the calendar lines up. Filter chips by tier, detail page per meet with broadcast logistics (TV, streaming, free options, live results), schedule of marquee events, and notable athletes. iCal subscription feed at /api/calendar.ics that any phone or laptop calendar app accepts. AI weekly brief via Groq Llama 3.3 70B in Kerry's voice. Static data refreshed weekly, no scraping live, no database, Vercel free tier.",
+    chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "iCal", "Track & Field"],
+    href: "https://github.com/whodeanie/track-meet-tracker",
+    label: "View repo",
+    cats: ["sports", "ai"],
+    caseStudy: "track-meet-tracker",
+    featured: true,
+    status: "rebuilding",
+  },
+  {
     title: "Quant Signal Engine",
-    tagline: "Walk forward backtester for three classic quant strategies, with AI commentary. Free.",
+    tagline: "Walk forward backtester. Three quant strategies. Sharpe, drawdown, Kelly sizing, AI commentary. Live and free.",
     description:
       "A Next.js 15 dashboard that runs RSI mean reversion, moving average crossover, and Bollinger band breakout strategies against real historical OHLC data. Walk forward simulation with capped Kelly position sizing, full performance statistics (total return, Sharpe, max drawdown, win rate, longest losing streak), and a buy and hold benchmark. Llama 3.3 70B writes regime aware commentary on each backtest via Groq. Educational analytics only. No trade execution. No brokerage integration.",
     chips: ["Next.js 15", "TypeScript", "Yahoo Finance", "Groq", "Recharts"],
@@ -28,6 +69,8 @@ const PROJECTS: Project[] = [
     label: "Live demo",
     cats: ["fintech", "ai"],
     featured: true,
+    hasLiveDemo: true,
+    status: "live",
   },
   {
     title: "MCP RAG Starter",
@@ -43,7 +86,7 @@ const PROJECTS: Project[] = [
   },
   {
     title: "n8n Agentic Workflow Library",
-    tagline: "291 production agentic workflows. 41 packs. Battle tested patterns.",
+    tagline: "Production agentic workflow patterns, packaged for reuse.",
     description:
       "An opinionated library of n8n workflow patterns covering function and tool calling, RAG retrieval, hybrid vector search, and multi step agent orchestration. Every pack ships with setup docs, validation tests, retry policies, and integrations across Slack, Gmail, HubSpot, Airtable, Notion, OpenAI, and Anthropic.",
     chips: ["n8n", "Agentic", "OpenAI", "Anthropic"],
@@ -51,18 +94,6 @@ const PROJECTS: Project[] = [
     label: "View repo",
     cats: ["ai", "tooling"],
     caseStudy: "n8n-workflow-library",
-    featured: true,
-  },
-  {
-    title: "Ivy Offline Eval Toolkit",
-    tagline: "Reproducible evaluation harness with a portable rubric library.",
-    description:
-      "An offline evaluation toolkit for LLM features that need to ship under safety guarantees. Portable rubrics, deterministic scaffolds, fixture based regression suites, and a CSV export pipeline that lets a non engineer review the failures.",
-    chips: ["Eval", "Offline", "Rubrics", "Python"],
-    href: "https://github.com/whodeanie/ivy-offline-toolkit",
-    label: "View repo",
-    cats: ["ai", "tooling"],
-    caseStudy: "ivy-offline-toolkit",
     featured: true,
   },
   {
@@ -76,21 +107,24 @@ const PROJECTS: Project[] = [
     cats: ["ai", "sports"],
     caseStudy: "nba-playoff-props",
     featured: true,
+    hasLiveDemo: true,
   },
   {
     title: "NBA DFS Optimizer",
-    tagline: "Mixed integer programming for DraftKings and FanDuel lineups, with AI commentary.",
+    tagline: "Custom branch and bound solver for DraftKings and FanDuel lineups, with per lineup AI commentary. Live and free.",
     description:
       "A custom branch and bound solver and a 2-opt local search that produce optimal NBA DFS lineups respecting salary cap, position eligibility, team limits, locks, excludes, stacking, and exposure. Each lineup ships with a 100 word Llama 3.3 70B analysis (free via Groq) of the contrarian leverage angle, the biggest risk, and the GPP outcome read. Companion to NBA Playoff Props, same audience, different problem.",
     chips: ["Next.js 15", "TypeScript", "MIP", "Groq", "Llama 3.3"],
-    href: "https://github.com/whodeanie/nba-dfs-optimizer",
-    label: "View repo",
+    href: "https://nba-dfs-optimizer.vercel.app",
+    label: "Live demo",
     cats: ["ai", "sports"],
     featured: true,
+    hasLiveDemo: true,
+    status: "live",
   },
   {
     title: "Polymarket Helper",
-    tagline: "Find mispriced prediction markets. Free, read only analysis tool.",
+    tagline: "120+ live prediction markets ranked by model edge, with AI reasoning per market. Live and free.",
     description:
       "A read only analytics layer for Polymarket. The edge model blends category specific historical base rates with the live crowd price, weighted by volume and pulled toward the prior on long dated markets. A bounded news sentiment adjustment from NewsData.io shifts the model up to four points in either direction. Each market detail page ships with a 100 word Llama 3.3 70B reasoning paragraph generated via Groq that explains why the market may be mispriced, the single biggest risk factor, and a three item watchlist. No wallet, no trade execution, no advice.",
     chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "Recharts"],
@@ -98,6 +132,20 @@ const PROJECTS: Project[] = [
     label: "Live demo",
     cats: ["ai", "sports"],
     featured: true,
+    hasLiveDemo: true,
+    status: "live",
+  },
+  {
+    title: "Sports Trivia",
+    tagline: "Live AI generated sports trivia game. 16 sports, 10 questions, 6 second timer.",
+    description:
+      "A rage demo style sports trivia game where every round is freshly written by Llama 3.3 70B. The page batches all 10 questions in a single call with a strict JSON contract, validates the schema, and retries once on a parse failure. Six popular sports ship with a baked fallback question pack so the game never breaks during outages. Scoring rewards speed with a bonus up to 50 points per correct answer. Per sport high score saved in localStorage. Procedural Web Audio sound effects, mobile responsive. Click and play with no signup.",
+    chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "Web Audio"],
+    href: "/play/sports-trivia/",
+    label: "Live demo",
+    cats: ["ai", "sports"],
+    featured: true,
+    hasLiveDemo: true,
   },
   {
     title: "Episode Takes",
@@ -105,16 +153,17 @@ const PROJECTS: Project[] = [
     description:
       "A free, open source rating and review app for TV that grades by episode, not by season. Half star precision, spoiler aware reveals, and per take share URLs. The killer feature is an AI take polisher: a half formed thought becomes a 60 to 100 word review in the user's own voice using Llama 3.3 70B via Groq, with a strict no inventing claims contract. Three more AI hooks ride along: season retrospective generator, spoiler classifier that auto flags risky takes, and a five pick recommender that mixes close to taste with stretch picks.",
     chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "TMDB"],
-    href: "https://github.com/whodeanie/episode-takes",
-    label: "View repo",
+    href: "https://episode-takes.vercel.app",
+    label: "Live demo",
     cats: ["ai", "production"],
     featured: true,
+    hasLiveDemo: true,
   },
   {
     title: "Claude Skill Suite",
     tagline: "Five production Claude Agent SDK skills that ship real digital products.",
     description:
-      "A family of Claude Agent SDK skills covering puzzle book publishing, coloring book publishing, KDP browser automation, Etsy storefront automation, and niche PDF generation. Each follows the same deterministic scaffold plus LLM hybrid pattern, with retry, fallback, and validation gates between stages.",
+      "A family of Claude Agent SDK skills covering puzzle book publishing, coloring book publishing, KDP browser automation, and niche PDF generation. Each follows the same deterministic scaffold plus LLM hybrid pattern, with retry, fallback, and validation gates between stages.",
     chips: ["Claude Agent SDK", "Anthropic", "Python", "Skills"],
     href: "https://github.com/whodeanie/claude-skill-template",
     label: "View kernel",
@@ -226,15 +275,16 @@ const PROJECTS: Project[] = [
     description:
       "Pulls team and game context from ESPN, structures the prompt for Claude Sonnet 4.6 via the Anthropic SDK, then renders polished HTML articles. Same pipeline used to produce game previews, betting analysis, and post game recaps.",
     chips: ["TypeScript", "Anthropic SDK", "Next.js", "Zod"],
-    href: "https://github.com/whodeanie/ai-sports-content-engine-ts",
+    href: "https://github.com/whodeanie/ai-sports-content-engine",
     label: "View repo",
     cats: ["ai", "sports"],
+    status: "rebuilding",
   },
   {
     title: "Live Game State Tracker",
     tagline: "Real time NBA game state via WebSocket with per play AI commentary.",
     description:
-      "A Hono server that polls and diffs the ESPN scoreboard, then streams per play commentary generated by Claude over WebSocket. Falls back to a deterministic rules based generator when no API key is configured.",
+      "A Hono server that polls and diffs the ESPN scoreboard, then streams per play commentary generated by Claude over WebSocket. A deterministic rules based generator handles commentary during outages so the demo never breaks.",
     chips: ["TypeScript", "Hono", "WebSocket", "Claude"],
     href: "https://github.com/whodeanie/live-game-state-tracker-ts",
     label: "View repo",
@@ -259,6 +309,7 @@ const PROJECTS: Project[] = [
     href: "https://github.com/whodeanie/kelly-bankroll-sizer-ts",
     label: "View repo",
     cats: ["sports"],
+    status: "rebuilding",
   },
   {
     title: "Live Odds Aggregator (TS)",
@@ -355,23 +406,13 @@ const PROJECTS: Project[] = [
 
   // BRAND
   {
-    title: "Paperloom Studio",
-    tagline: "AI generated puzzle, coloring, and information products. Live on Gumroad.",
+    title: "KDP Author Page",
+    tagline: "Eight plus puzzle and coloring books published on Amazon KDP.",
     description:
-      "The storefront for the digital products produced by the Claude skill suite. Coloring books, puzzle books, niche information PDFs, and n8n workflow packs. Live revenue, real customers, real refunds.",
-    chips: ["Gumroad", "Brand", "Live"],
-    href: "https://kerryaiperson.gumroad.com",
-    label: "Visit store",
-    cats: ["brand", "production"],
-  },
-  {
-    title: "KerryPaperCo on Etsy",
-    tagline: "Storefront for printable AI assisted designs.",
-    description:
-      "The Etsy side of the digital product portfolio. Same source of truth as Gumroad, different audience, different pricing strategy. Shipping orders.",
-    chips: ["Etsy", "Brand", "Live"],
-    href: "https://www.etsy.com/shop/KerryPaperCo",
-    label: "Visit store",
+      "Live catalog of puzzle and coloring books published to Amazon Kindle Direct Publishing. Each title produced through the Claude skill suite (cover art, interior layout, metadata) and submitted through the KDP browser automation skill.",
+    chips: ["KDP", "Brand", "Live"],
+    href: "https://www.amazon.com/s?k=kerry+dean",
+    label: "View catalog",
     cats: ["brand", "production"],
   },
 ];
@@ -399,7 +440,14 @@ const CHIP_COLOR: Record<Cat, string> = {
 };
 
 export default function ProjectGrid() {
-  const [active, setActive] = useState<"all" | "case-studies" | Cat>("all");
+  const [active, setActive] = useState<"all" | "case-studies" | Cat>("case-studies");
+  const { captureProjectCardClick, captureGithubLinkClicked, captureExternalLinkClicked } = useAnalytics();
+  const trackProjectClick = (p: Project, kind: "case-study" | "primary") => {
+    captureProjectCardClick({ title: p.title, href: p.href, cats: p.cats });
+    if (kind === "case-study") return;
+    if (/github\.com/i.test(p.href)) captureGithubLinkClicked(p.href, p.title);
+    else if (!p.href.startsWith("/")) captureExternalLinkClicked(p.href, p.title);
+  };
   const filtered = useMemo(() => {
     if (active === "all") return PROJECTS;
     if (active === "case-studies") return PROJECTS.filter((p) => p.caseStudy);
@@ -433,7 +481,7 @@ export default function ProjectGrid() {
         {filtered.map((p) => (
           <article
             key={p.title}
-            className="group rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] transition-colors flex flex-col gap-3"
+            className="group relative rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] hover:shadow-[0_4px_12px_rgba(166,115,64,0.1)] hover:-translate-y-0.5 transition-all flex flex-col gap-3"
           >
             <div className="flex items-start justify-between gap-3">
               <h3 className="serif text-xl font-medium leading-snug">
@@ -483,10 +531,25 @@ export default function ProjectGrid() {
               ))}
             </div>
 
+            {p.hasLiveDemo && <SandboxPill kind="demo" />}
+            {p.status === "rebuilding" ? (
+              <span
+                className="self-start inline-flex items-center gap-1.5 rounded-full px-2.5 py-[2px] border font-mono text-[9px] uppercase tracking-widest"
+                style={{
+                  color: "#D49A7A",
+                  borderColor: "#D49A7A55",
+                  background: "#D49A7A10",
+                }}
+              >
+                Web app coming back online soon
+              </span>
+            ) : null}
+
             <div className="mt-auto pt-2 flex flex-wrap gap-2">
               {p.caseStudy ? (
                 <a
                   href={`/work/${p.caseStudy}/`}
+                  onClick={() => trackProjectClick(p, "case-study")}
                   className="rounded-md border border-[var(--accent)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors"
                 >
                   Read case study →
@@ -495,9 +558,14 @@ export default function ProjectGrid() {
               {p.label !== "Read writeup" ? (
                 <a
                   href={p.href}
+                  onClick={() => trackProjectClick(p, "primary")}
                   target={p.href.startsWith("/") ? undefined : "_blank"}
                   rel={p.href.startsWith("/") ? undefined : "noreferrer"}
-                  className="rounded-md border border-[var(--rule)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--fg)]/80 hover:border-[var(--fg)] hover:text-[var(--fg)] transition-colors"
+                  className={
+                    p.status === "live" && p.label === "Live demo"
+                      ? "rounded-md border border-[var(--accent)] bg-[var(--accent)]/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors"
+                      : "rounded-md border border-[var(--rule)] px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[var(--fg)]/80 hover:border-[var(--fg)] hover:text-[var(--fg)] transition-colors"
+                  }
                 >
                   {p.label} ↗
                 </a>

@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ANSWERS, wordleAnswerForDate } from "../../../lib/wordle-words";
-import { chatCompletion, getStoredKey } from "../../../lib/groq";
-import GroqKeyPanel from "../../../components/GroqKeyPanel";
+import { chatCompletion } from "../../../lib/groq";
 
 type Letter = { ch: string; state: "empty" | "absent" | "present" | "correct" };
 type Row = Letter[];
@@ -121,7 +120,7 @@ export default function WordlePage() {
   const [shake, setShake] = useState(false);
 
   useEffect(() => {
-    setHasKey(!!getStoredKey());
+    setHasKey(true);
     const today = todayUTC();
     try {
       const raw = localStorage.getItem(STATE_KEY);
@@ -248,8 +247,8 @@ export default function WordlePage() {
       setHintError("Make at least one guess first so I have something to reason about.");
       return;
     }
-    if (!getStoredKey()) {
-      setHintError("Connect a Groq key first to enable hints.");
+    if (false) {
+      setHintError("AI hints unavailable right now.");
       return;
     }
     setHintLoading(true);
@@ -278,9 +277,9 @@ export default function WordlePage() {
       setHint(reply);
     } catch (e: any) {
       setHintError(
-        e?.message?.startsWith("missing_groq_key")
-          ? "Connect a Groq key first."
-          : "Hint failed. Try again, or check your Groq key.",
+        e?.message === "groq_unavailable"
+          ? "AI hint generation is temporarily unavailable on this deployment. The game itself runs entirely client side and is not affected. Try a guess based on what you already know about common five letter words and vowel placement."
+          : "Hint unavailable right now. Try again in a moment.",
       );
     } finally {
       setHintLoading(false);
@@ -311,7 +310,6 @@ export default function WordlePage() {
         </header>
 
         <div className="mt-6">
-          <GroqKeyPanel label="AI hint" onChange={setHasKey} />
         </div>
 
         <div className="mt-8 flex flex-col items-center">
@@ -439,7 +437,7 @@ export default function WordlePage() {
             </p>
             <p>
               State and stats persist in localStorage. No backend, no cookies,
-              no server side game state. The Groq key is stored in your browser
+              no server side game state. No setup needed for visitors, the Groq call runs through a server route
               only and is sent on each call.
             </p>
           </div>

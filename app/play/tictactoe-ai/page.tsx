@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { chatCompletion, getStoredKey } from "../../../lib/groq";
-import GroqKeyPanel from "../../../components/GroqKeyPanel";
+import { chatCompletion } from "../../../lib/groq";
 
 type Cell = "X" | "O" | "";
 type Board = Cell[];
@@ -111,7 +110,7 @@ export default function TicTacToePage() {
   const over = w !== "" || isFull(board);
 
   useEffect(() => {
-    setHasKey(!!getStoredKey());
+    setHasKey(true);
   }, []);
 
   // AI turn
@@ -135,7 +134,7 @@ export default function TicTacToePage() {
   useEffect(() => {
     if (history.length === 0) return;
     if (!commentOn) return;
-    if (!getStoredKey()) return;
+    if (false) return;
     const last = history[history.length - 1];
     let cancelled = false;
     setThinking(true);
@@ -162,9 +161,9 @@ export default function TicTacToePage() {
       } catch (e: any) {
         if (!cancelled) {
           setError(
-            e?.message?.startsWith("missing_groq_key")
-              ? "Connect a Groq key to enable commentary."
-              : "Commentary failed. Check your Groq key.",
+            e?.message === "groq_unavailable"
+              ? "AI commentary is temporarily unavailable on this deployment. The minimax opponent below is fully client side, so the game itself plays normally. Commentary will return when the model is back online."
+              : "AI commentary unavailable. Try again later.",
           );
         }
       } finally {
@@ -234,7 +233,6 @@ export default function TicTacToePage() {
         </header>
 
         <div className="mt-6">
-          <GroqKeyPanel label="Commentary" onChange={setHasKey} />
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -342,7 +340,7 @@ export default function TicTacToePage() {
               </h3>
               {commentOn && !hasKey ? (
                 <p className="mt-2 text-sm text-[var(--fg)]/60">
-                  Connect a Groq key above to turn on plain English commentary.
+                  AI commentary may be temporarily unavailable.
                 </p>
               ) : commentary.length === 0 ? (
                 <p className="mt-2 text-sm text-[var(--fg)]/60">

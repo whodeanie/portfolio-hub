@@ -1,18 +1,9 @@
 import Link from 'next/link';
-import Stats from '../components/Stats';
+import BentoHero from '../components/BentoHero';
+import ScrollReveal from '../components/ScrollReveal';
 import ProjectGrid from '../components/ProjectGrid';
 
 const products = [
-  {
-    name: 'Paperloom Studio',
-    tagline: 'AI generated puzzle, coloring, and information products. Live revenue.',
-    href: 'https://kerryaiperson.gumroad.com'
-  },
-  {
-    name: 'KerryPaperCo on Etsy',
-    tagline: 'Storefront for printable AI assisted designs.',
-    href: 'https://www.etsy.com/shop/KerryPaperCo'
-  },
   {
     name: 'KDP Author Page',
     tagline: 'Eight plus published books on Amazon Kindle Direct Publishing.',
@@ -25,60 +16,66 @@ const products = [
   }
 ];
 
-const stack = 'python · typescript · anthropic · openai · langchain · pinecone · faiss · fastapi · next.js · aws · docker · n8n';
+const STACK_CATEGORIES = [
+  {
+    title: 'Languages',
+    items: ['TypeScript', 'JavaScript', 'Python', 'C# / .NET', 'Java', 'Kotlin', 'C / C++', 'SQL']
+  },
+  {
+    title: 'Frontend',
+    items: ['React', 'Next.js', 'Redux', 'Vue.js', 'Angular', 'Tailwind CSS', 'Bootstrap']
+  },
+  {
+    title: 'Backend',
+    items: ['Node.js', 'ASP.NET', 'Entity Framework', 'Spring', 'GraphQL', 'REST APIs']
+  },
+  {
+    title: 'Mobile',
+    items: ['Flutter', 'Kotlin']
+  },
+  {
+    title: 'Databases',
+    items: ['Postgres', 'DynamoDB', 'BigQuery', 'Redis', 'Neo4j', 'MongoDB', 'SQL Server', 'Firebase']
+  },
+  {
+    title: 'Cloud',
+    items: ['AWS Lambda', 'AWS Bedrock', 'AWS Rekognition', 'AWS S3', 'Microsoft Azure', 'Google Cloud Platform', 'Vercel']
+  },
+  {
+    title: 'DevOps and CI',
+    items: ['Docker', 'GitHub Actions', 'CircleCI', 'Git', 'CI/CD pipelines']
+  },
+  {
+    title: 'AI and LLM',
+    items: ['Anthropic Claude', 'Claude Agent SDK', 'OpenAI GPT-4', 'Google Gemini', 'Antigravity', 'LangChain', 'LlamaIndex', 'Model Context Protocol', 'n8n']
+  },
+  {
+    title: 'Retrieval and Vector',
+    items: ['Pinecone', 'Weaviate', 'FAISS', 'RAG', 'Hybrid retrieval', 'Embeddings', 'Reranking']
+  },
+  {
+    title: 'ML and Evaluation',
+    items: ['PyTorch', 'Hugging Face', 'MLflow', 'Databricks', 'LangSmith', 'Braintrust', 'Phoenix']
+  },
+  {
+    title: 'Healthcare and Domain',
+    items: ['FHIR', 'HIPAA']
+  },
+  {
+    title: 'Integrations',
+    items: ['Slack', 'Gmail', 'HubSpot', 'Airtable', 'Notion', 'Zapier']
+  }
+];
 
 export default function Page() {
   return (
     <main className="min-h-screen px-6 sm:px-8 py-16 sm:py-24">
-      {/* HERO */}
-      <section className="mx-auto max-w-prose">
-        <div className="flex items-center gap-5 sm:gap-6">
-          <img
-            src="/headshot-square.jpg"
-            alt="Kerry Dean Jr."
-            width={80}
-            height={80}
-            className="h-20 w-20 sm:h-24 sm:w-24 shrink-0 rounded-full object-cover ring-2 ring-[var(--accent)] ring-offset-2 ring-offset-[var(--bg)]"
-          />
-          <h1 className="serif text-5xl sm:text-6xl leading-[1.05] font-medium tracking-tight">
-            Kerry Dean Jr.
-          </h1>
-        </div>
-        <p className="mt-5 text-lg sm:text-xl leading-relaxed text-[var(--fg)]/85">
-          AI Engineer. I ship production AI systems that move real money.
-        </p>
-        <div className="mt-10 flex flex-wrap gap-4 text-sm">
-          <Link href="/contact" className="hover:opacity-70">
-            Contact
-          </Link>
-          <span className="text-[var(--muted)]">·</span>
-          <a href="https://github.com/whodeanie" target="_blank" rel="noreferrer" className="hover:opacity-70">
-            GitHub
-          </a>
-          <span className="text-[var(--muted)]">·</span>
-          <a href="/resume/" className="hover:opacity-70">
-            Resume
-          </a>
-          <span className="text-[var(--muted)]">·</span>
-          <a href="/resume.pdf" target="_blank" rel="noreferrer" className="hover:opacity-70">
-            PDF
-          </a>
-          <span className="text-[var(--muted)]">·</span>
-          <a href="/play/" className="hover:opacity-70">
-            Play
-          </a>
-        </div>
+      {/* BENTO HERO */}
+      <section className="mx-auto max-w-7xl">
+        <BentoHero />
       </section>
 
-      {/* STATS */}
-      <section className="mx-auto max-w-prose mt-24 section-rule pt-14">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
-          By the numbers
-        </h2>
-        <Stats />
-      </section>
-
-      {/* CAREER LINK (replaces accordion) */}
+      {/* CAREER SUMMARY */}
       <section className="mx-auto max-w-prose mt-24 section-rule pt-14">
         <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
           About my career
@@ -90,31 +87,61 @@ export default function Page() {
           </p>
         </div>
         <div className="mt-6">
-          <a
+          <Link
             href="/resume/"
             className="inline-flex items-baseline gap-3 rounded-lg border border-[var(--rule)] px-4 py-3 hover:border-[var(--accent)] transition-colors"
           >
             <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)]">
               Read the full work history at /resume →
             </span>
-          </a>
+          </Link>
         </div>
       </section>
 
       {/* PROJECTS */}
-      <section className="mx-auto max-w-prose mt-24 section-rule pt-14">
+      <section className="mx-auto max-w-7xl mt-24 section-rule pt-14">
         <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
           Selected work
         </h2>
-        <p className="mt-6 prose-body text-[var(--fg)]/85 leading-relaxed">
-          These are the production AI systems and tools I have shipped over the
-          last year. The ones marked as case studies have writeups on this site
-          covering the problem, the architecture, and what I would do
-          differently. The rest link out to the GitHub repository or the live
-          demo. If a project does not have a writeup yet, the README in the
-          repository is the writeup.
+        <p className="mt-6 prose-body text-[var(--fg)]/85 leading-relaxed max-w-prose">
+          These are the production AI systems and tools I have shipped over the last year. The ones marked as case studies have writeups on this site covering the problem, the architecture, and what I would do differently. The rest link out to the GitHub repository or the live demo.
         </p>
-        <ProjectGrid />
+        <ScrollReveal>
+          <div className="mt-8">
+            <ProjectGrid />
+          </div>
+        </ScrollReveal>
+      </section>
+
+      {/* TECH STACK */}
+      <section className="mx-auto max-w-4xl mt-24 section-rule pt-14">
+        <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
+          Tech stack
+        </h2>
+        <p className="mt-6 prose-body text-[var(--fg)]/85 leading-relaxed max-w-prose">
+          Nine plus years of shipping has accumulated a deep stack. The categories below cover what I have actually used in production, not a wish list. Full stack across web, mobile, data, and AI.
+        </p>
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
+          {STACK_CATEGORIES.map((cat) => (
+            <ScrollReveal key={cat.title}>
+              <div>
+                <h3 className="font-mono text-[11px] uppercase tracking-widest text-[var(--accent)] mb-3">
+                  {cat.title}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {cat.items.map((item) => (
+                    <span
+                      key={item}
+                      className="font-mono text-xs px-3 py-1.5 rounded-md border border-[var(--rule)] text-[var(--fg)]/85 hover:border-[var(--accent)] transition-colors"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
       </section>
 
       {/* LIVE PRODUCTS */}
@@ -124,32 +151,23 @@ export default function Page() {
         </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {products.map((p) => (
-            <a
-              key={p.name}
-              href={p.href}
-              target="_blank"
-              rel="noreferrer"
-              className="group rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] transition-colors"
-            >
-              <div className="serif text-lg font-medium group-hover:text-[var(--accent)]">
-                {p.name}
-              </div>
-              <div className="mt-2 text-sm text-[var(--fg)]/70 leading-relaxed">{p.tagline}</div>
-              <div className="mt-4 font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
-                Visit ↗
-              </div>
-            </a>
+            <ScrollReveal key={p.name}>
+              <a
+                href={p.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] hover:shadow-[0_4px_12px_rgba(166,115,64,0.1)] hover:-translate-y-0.5 transition-all"
+              >
+                <div className="serif text-lg font-medium group-hover:text-[var(--accent)]">
+                  {p.name}
+                </div>
+                <div className="mt-2 text-sm text-[var(--fg)]/70 leading-relaxed">{p.tagline}</div>
+                <div className="mt-4 font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+                  Visit ↗
+                </div>
+              </a>
+            </ScrollReveal>
           ))}
-        </div>
-      </section>
-
-      {/* TECH STACK */}
-      <section className="mx-auto max-w-prose mt-24 section-rule pt-14">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
-          Stack
-        </h2>
-        <div className="mt-6 font-mono text-sm text-[var(--fg)]/80 leading-relaxed">
-          {stack}
         </div>
       </section>
 
@@ -169,15 +187,14 @@ export default function Page() {
         </figure>
         <div className="mt-8 prose-body text-[var(--fg)]/85 leading-relaxed">
           <p>
-            I am a software engineer who fell hard into applied AI in 2024 and
-            has not really come back out. Before that I spent the better part
-            of a decade shipping production systems in places where mistakes
-            had teeth: a federal agency processing complaints with audit
-            requirements, a senior care provider operating inside the HIPAA
-            boundary, an agtech platform whose users were making spray and
-            irrigation decisions on the data my dashboards rendered. That
-            background is the part of my brain I bring to every Generative AI
-            project now.
+            I am a software engineer with the better part of a decade
+            shipping production systems in places where mistakes had teeth: a
+            federal agency processing complaints with audit requirements, a
+            senior care provider operating inside the HIPAA boundary, an
+            agtech platform whose users were making spray and irrigation
+            decisions on the data my dashboards rendered. That same
+            engineering muscle is what I bring to every Generative AI system
+            I build today.
           </p>
           <p>
             Day to day I build production AI systems. RAG pipelines that have
@@ -192,8 +209,8 @@ export default function Page() {
           </p>
           <p>
             On the side I run a small portfolio of AI assisted digital
-            products. A Gumroad storefront, an Etsy shop, an Amazon KDP author
-            page, and a public GitHub organization with somewhere north of
+            products. An Amazon KDP author page with eight plus published
+            books, and a public GitHub organization with somewhere north of
             thirty repositories. The products are built with the same Claude
             Agent SDK and n8n patterns I write about, which means the case
             studies on this site are not theoretical. The pipelines are live,
@@ -201,17 +218,18 @@ export default function Page() {
           </p>
           <p>
             Recently I have been spending most of my time on three things. The
-            first is the n8n agentic workflow library, which now spans 291
-            workflows across 41 packs and is the most accessible way to learn
-            the patterns I rely on. The second is the Claude skill suite,
-            where I am turning the production patterns into reusable Claude
-            Agent SDK skills with deterministic scaffolds and validation gates.
-            The third is the live NBA playoff props product, which is a fun
-            way to keep an honest scoreboard on a model in production. Every
-            resolved pick gets published whether it hit or missed.
+            first is an n8n agentic workflow library that packages the
+            production patterns I rely on so other teams can pick them up
+            without rediscovering the rough edges. The second is the Claude
+            skill suite, where I am turning the same patterns into reusable
+            Claude Agent SDK skills with deterministic scaffolds and
+            validation gates. The third is the live NBA playoff props
+            product, which is a fun way to keep an honest scoreboard on a
+            model in production. Every resolved pick gets published whether
+            it hit or missed.
           </p>
           <p>
-            I am open to senior AI Engineer roles where the team
+            I am open to senior Software Engineer roles where the team
             actually ships. I am especially interested in places that take
             evaluation seriously, that have at least one regulated surface in
             the product, and that have not given up on type safety. Contracts
@@ -256,9 +274,9 @@ export default function Page() {
             </a>
           </li>
           <li>
-            <a href="/resume/" className="hover:text-[var(--accent)]">
+            <Link href="/resume/" className="hover:text-[var(--accent)]">
               Full resume
-            </a>
+            </Link>
           </li>
         </ul>
       </section>

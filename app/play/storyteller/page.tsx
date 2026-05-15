@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { chatCompletion, getStoredKey } from "../../../lib/groq";
-import GroqKeyPanel from "../../../components/GroqKeyPanel";
+import { chatCompletion } from "../../../lib/groq";
 
 type Genre = "sci-fi" | "fantasy" | "noir" | "romance" | "horror";
 
@@ -124,6 +123,82 @@ const ENDING_PROMPT = `You are a tight, evocative interactive fiction writer. Wr
 Output STRICT JSON only: { "body": "<closing scene, 180 to 240 words>", "title": "<short title under 8 words>" }
 Rules. Reflect the player's leading alignment subtly in the tone and outcome. Resolve the central thread set up in scene one. Second person, present tense. No em dashes or en dashes.`;
 
+const STATIC_FALLBACK_SCENE: Record<Genre, { body: string; choices: Choice[] }> = {
+  "sci-fi": {
+    body:
+      "You stand alone on the bridge of the salvage ship Margery, the distress beacon still pulsing on the ancient console. Eight years of silence answered in a single ping. The viewports show nothing but dark and the faint outline of a hull that should not be drifting this far out. A crew manifest blinks on the secondary screen. Twenty seven names. All marked unknown status. Behind you, the airlock cycles open without authorization. The lights drop to amber. Somewhere in the lower decks, something heavy moves across the floor. You can hear breathing from the comm channel that no one should be using. Your suit's life support reads ninety minutes. The console asks you to confirm boarding before the breach. The pulse of the beacon slows, as if it knows you arrived. You feel the cold of the hull through your gloves. Whatever waits below has been waiting a long time. The choice you make in the next ten seconds will set the rest of this story in motion. Your instinct says one thing. Your training says another. The clock on the airlock counts down.",
+    choices: [
+      { id: "A", label: "Honor the distress call, board with caution.", alignment: "chivalrous" },
+      { id: "B", label: "Scan the manifest before stepping through.", alignment: "pragmatic" },
+      { id: "C", label: "Open every channel and shout into the dark.", alignment: "chaotic" },
+    ],
+  },
+  fantasy: {
+    body:
+      "The forest stops where the road bends, as if cut by a knife. Past the line, the trees lean inward and the air tastes of iron. A barefoot child waits exactly where the road ends, head tilted, eyes too dark for the gray afternoon. She does not speak when you slow your horse. She lifts one small hand and points down the path, toward a hollow you cannot see from here. Your saddlebag carries a sealed letter from the dying baron, two silver coins, and a knife you have not had to use in eleven years. The horse refuses to take another step. Crows sit on the branches above without sound. You realize the wind has died. The child waits. Her mouth opens slowly and she says your name. Not the name you ride under. The name your mother gave you in the back room of an inn long since burned to the ground. The world has narrowed to this clearing, this child, this single moment of being known by something you do not know. You can taste the choice in the air before you make it.",
+    choices: [
+      { id: "A", label: "Dismount and kneel. Ask her name.", alignment: "chivalrous" },
+      { id: "B", label: "Stay mounted. Offer her a coin for the road.", alignment: "pragmatic" },
+      { id: "C", label: "Draw the knife and walk past her.", alignment: "chaotic" },
+    ],
+  },
+  noir: {
+    body:
+      "The diner is empty except for the woman in the green coat, the cook turning his back to the grill, and you. She slides a brass key across the formica without looking up. The tag on the ring is wood, hand carved, with a number burned into it. Forty seven. She lifts her coffee, drinks, and walks out into the rain without saying a word. The door bell rings twice as it settles. You sit with the key in front of you, the steam from your own cup curling around your fingers. The cook still has not turned around. Outside, the streetlight flickers and a black sedan rolls past slow. Forty seven is the number on the locker at the bus station two blocks east. Forty seven is also the number of a room at the Crawford Hotel where a man you used to work for went missing in March. Both are possible. You finger the key. Your retainer is still missing. Your colleague is still dead. The woman in the green coat is already halfway down the block. The rain is picking up. You have maybe ninety seconds before her trail goes cold.",
+    choices: [
+      { id: "A", label: "Catch up to her in the rain.", alignment: "chivalrous" },
+      { id: "B", label: "Pocket the key. Pay your check. Think.", alignment: "pragmatic" },
+      { id: "C", label: "Shout the dead man's name across the diner.", alignment: "chaotic" },
+    ],
+  },
+  romance: {
+    body:
+      "The gate agent calls your row and the man beside you in the boarding area does not move. He has rebooked the entire delayed flight without telling you, paid the difference out of his own card, and asked the airline to keep you seated beside him in seat 14B and 14C. He says he is sorry about the surprise. He says he overheard your call to your sister about the funeral in Dallas, and that he did not want you to fly alone. You do not know him. You met him at the coffee cart by gate B14 ninety minutes ago. He has kind eyes and the careful posture of someone who has lost enough people to know what helping looks like. He hands you the new boarding pass with your name spelled correctly. He waits. The line shortens. You can feel the eyes of the gate agent on you, the hum of the terminal, the heat of a stranger's quiet generosity. Your phone buzzes with your sister's number. The window of choice is small. Whatever you decide here will not just be about the flight. It will be about the kind of stranger you let in.",
+    choices: [
+      { id: "A", label: "Take the seat. Thank him quietly.", alignment: "chivalrous" },
+      { id: "B", label: "Trade seats with the man behind you.", alignment: "pragmatic" },
+      { id: "C", label: "Ask him what he really wants.", alignment: "chaotic" },
+    ],
+  },
+  horror: {
+    body:
+      "You count the doors in your hallway again. Seven last night. Eight tonight. The eighth is at the far end, painted the same flat white as the others, with no number and no peephole. The brass handle looks newer than the rest. The hallway smells faintly of paper and something underneath it you cannot name. Your phone shows no service. The light fixture overhead hums on a frequency you can feel in your teeth. Through the wall to your right, your neighbor's television is still playing the local news from six hours ago, the same anchor saying the same forecast on loop. You have lived in this building eleven months. You have walked past these doors every day. You do not own a key to the eighth one. Yet the key on your ring, the one you have never identified, fits the lock without effort. The door is warm. Whatever is on the other side is breathing in time with you. You realize you have already taken three steps closer than you remember. The hallway behind you has grown one door longer.",
+    choices: [
+      { id: "A", label: "Knock and announce yourself.", alignment: "chivalrous" },
+      { id: "B", label: "Back away. Photograph the door.", alignment: "pragmatic" },
+      { id: "C", label: "Turn the key. Step inside.", alignment: "chaotic" },
+    ],
+  },
+};
+
+const STATIC_FALLBACK_ENDING: Record<Genre, { title: string; body: string }> = {
+  "sci-fi": {
+    title: "The signal you sent",
+    body:
+      "You finish the manual repair on the beacon and let it broadcast clean for the first time in eight years. The salvage ship Margery groans under you, but holds. Whatever was waiting in the lower decks is no longer there, or no longer cares. You sit in the captain's chair the dead crew left behind. The viewports show stars and the faint glint of a returning fleet, your fleet, drawn by the signal you stabilized. You think of the names on the manifest. Twenty seven people who deserved a better ending than the one this ship gave them. You write the report in your own hand and time stamp it for the record. The kindness you carried into this place did not bring them back. It did make the place safe enough that the people who come next will not be lost the same way. Your suit life support reads twelve minutes. Your fleet is six minutes out. The math finally works in your favor. You close your eyes and the beacon pulses steady, the first thing in eight years to keep a promise.",
+  },
+  fantasy: {
+    title: "The name the forest knew",
+    body:
+      "You speak the name your mother gave you back to the child at the road's bend, and the forest answers. The hollow opens beneath you and you do not fall but step, as if the path had always been there. The baron's letter dissolves into smoke in your saddlebag. The crows lift in a single black sheet and the wind returns, and the child is no longer a child. She is the keeper of names, and she has been waiting for someone who was willing to be known. You ride out of the hollow at dusk and the road bends back into the world you came from. The kingdom does not remember the baron. The kingdom does not remember the war. You carry the only memory of either, and the small wooden token she pressed into your palm, warm as a heartbeat. You will know what to do with it when the time comes. The horse takes one steady step, and then another, and the road behind you closes.",
+  },
+  noir: {
+    title: "Forty seven",
+    body:
+      "The locker at the bus station holds a single envelope and your missing retainer in twenties. The envelope has the name of the man who hired you on it, in handwriting you recognize from the case file. He is not dead. He never was. The woman in the green coat is his daughter, and she came to you because she ran out of better options. You pocket the cash because rent is rent. You take the envelope to the Crawford Hotel and you do not knock. You slide it under the door of room forty seven and you walk down the back stairs without looking at the desk clerk. The rain has stopped. The streetlight is steady. You think of all the cases that ended in the right answer for the wrong reasons and you keep walking. Whatever happens to the man in room forty seven now is not yours to carry. You have done the part you took the retainer for. The rest is the city's problem, and the city has never been short on problems.",
+  },
+  romance: {
+    title: "Seat 14B",
+    body:
+      "You take the seat beside him without saying yes or no out loud. The plane levels off and you tell him about your sister and the funeral and the eight years of phone calls that built to this one. He listens the way you wish you had been listened to in your twenties. By the time the cart comes through he knows your father's full name and the way he laughed and the year he stopped. He does not try to fix any of it. He orders you the same coffee you ordered at gate B14 and pays for it in cash. When you land in Dallas you exchange numbers without making a plan. You walk into the funeral home alone, which is how it should be, and you carry the warmth of a stranger's quiet generosity into the room with you. Months later he will be the one who picks up on the third ring at three in the morning, and you will think back to the gate agent calling row fourteen and the small careful choice you made to let someone in.",
+  },
+  horror: {
+    title: "One door longer",
+    body:
+      "You photograph the door and you walk back to your apartment without turning the key. You count the doors again. Eight. You sleep with the lights on. In the morning the eighth door is gone. Seven again, exactly the way they always were. You do not tell your neighbor, who is suddenly cheerful, who waves at you in the lobby for the first time in eleven months. You do not tell anyone. The brass key is still on your ring. You cannot bring yourself to remove it. Once a week, on the night your building's halls go quiet, you walk to the end of the hallway and count. Most weeks there are seven doors. Some weeks there are eight. You do not approach the eighth door again. You simply count it, and you go back to bed, and you live the rest of your life knowing that something keeps a door for you in your own building, and that you were given exactly one chance to see what was inside, and that you chose to keep counting instead.",
+  },
+};
+
 export default function StorytellerPage() {
   const [genre, setGenre] = useState<Genre>("sci-fi");
   const [setup, setSetup] = useState<string>(GENRES[0].setups[0]);
@@ -132,12 +207,13 @@ export default function StorytellerPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [hasKey, setHasKey] = useState(false);
+  const [usingFallback, setUsingFallback] = useState(false);
   const [ending, setEnding] = useState<string>("");
   const [endingTitle, setEndingTitle] = useState<string>("");
   const [targetLength, setTargetLength] = useState<number>(6);
 
   useEffect(() => {
-    setHasKey(!!getStoredKey());
+    setHasKey(true);
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
@@ -163,12 +239,9 @@ export default function StorytellerPage() {
   const setups = useMemo(() => GENRES.find((g) => g.id === genre)?.setups || [], [genre]);
 
   async function startStory() {
-    if (!getStoredKey()) {
-      setError("Connect a Groq key first to start a story.");
-      return;
-    }
     setBusy(true);
     setError("");
+    setUsingFallback(false);
     setEnding("");
     setEndingTitle("");
     setScenes([]);
@@ -189,7 +262,19 @@ export default function StorytellerPage() {
       if (!parsed) throw new Error("parse_error");
       setScenes([{ index: 1, body: parsed.body, choices: parsed.choices }]);
     } catch (e: any) {
-      setError(e?.message === "parse_error" ? "The model returned malformed JSON. Try again." : "Story start failed. Check your Groq key.");
+      const msg = e?.message;
+      if (msg === "groq_unavailable") {
+        const fallback = STATIC_FALLBACK_SCENE[genre];
+        setUsingFallback(true);
+        setScenes([{ index: 1, body: fallback.body, choices: fallback.choices }]);
+        setError(
+          "AI generation is temporarily unavailable. Showing a single hand written scene so you can see the output shape. Pick a choice to read the example ending.",
+        );
+      } else if (msg === "parse_error") {
+        setError("The model returned malformed JSON. Try again.");
+      } else {
+        setError("Story start failed. Try again in a moment.");
+      }
     } finally {
       setBusy(false);
     }
@@ -197,14 +282,17 @@ export default function StorytellerPage() {
 
   async function pickChoice(choice: Choice) {
     if (busy) return;
-    if (!getStoredKey()) {
-      setError("Connect a Groq key first.");
-      return;
-    }
     const updated = [...scenes];
     updated[updated.length - 1] = { ...updated[updated.length - 1], picked: choice };
     setScenes(updated);
     setAlignment((a) => ({ ...a, [choice.alignment]: a[choice.alignment] + 1 }));
+
+    if (usingFallback) {
+      const fallback = STATIC_FALLBACK_ENDING[genre];
+      setEnding(fallback.body);
+      setEndingTitle(fallback.title);
+      return;
+    }
 
     if (updated.length >= targetLength) {
       // Generate ending.
@@ -231,8 +319,18 @@ export default function StorytellerPage() {
         const parsed = JSON.parse(raw);
         setEnding(String(parsed.body || ""));
         setEndingTitle(String(parsed.title || "Ending"));
-      } catch (e) {
-        setError("Ending generation failed. Try again.");
+      } catch (e: any) {
+        if (e?.message === "groq_unavailable") {
+          const fallback = STATIC_FALLBACK_ENDING[genre];
+          setEnding(fallback.body);
+          setEndingTitle(fallback.title);
+          setUsingFallback(true);
+          setError(
+            "AI generation went offline mid story. Showing a hand written ending for this genre so you can see how the closer reads.",
+          );
+        } else {
+          setError("Ending generation failed. Try again.");
+        }
       } finally {
         setBusy(false);
       }
@@ -260,7 +358,20 @@ export default function StorytellerPage() {
       if (!parsed) throw new Error("parse_error");
       setScenes([...updated, { index: updated.length + 1, body: parsed.body, choices: parsed.choices }]);
     } catch (e: any) {
-      setError(e?.message === "parse_error" ? "The model returned malformed JSON. Try the choice again." : "Next scene failed. Try again.");
+      const msg = e?.message;
+      if (msg === "groq_unavailable") {
+        const fallback = STATIC_FALLBACK_ENDING[genre];
+        setEnding(fallback.body);
+        setEndingTitle(fallback.title);
+        setUsingFallback(true);
+        setError(
+          "AI generation went offline mid story. Jumping to a hand written ending for this genre so you can still see the closer.",
+        );
+      } else if (msg === "parse_error") {
+        setError("The model returned malformed JSON. Try the choice again.");
+      } else {
+        setError("Next scene failed. Try again.");
+      }
     } finally {
       setBusy(false);
     }
@@ -272,6 +383,7 @@ export default function StorytellerPage() {
     setEndingTitle("");
     setAlignment(newAlignment());
     setError("");
+    setUsingFallback(false);
   }
 
   const lead = leadingAlignment(alignment);
@@ -299,7 +411,6 @@ export default function StorytellerPage() {
         </header>
 
         <div className="mt-6">
-          <GroqKeyPanel label="Storyteller" onChange={setHasKey} />
         </div>
 
         {scenes.length === 0 && !ending && (
@@ -353,6 +464,16 @@ export default function StorytellerPage() {
           </section>
         )}
 
+        {usingFallback && scenes.length > 0 && (
+          <div className="mt-6 rounded-lg border border-[#D49A7A]/40 bg-[#D49A7A]/[0.06] p-4">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-[#D49A7A]">
+              Example output, AI offline
+            </p>
+            <p className="mt-2 text-sm text-[var(--fg)]/85 leading-relaxed">
+              Llama 3.3 70B is temporarily unavailable on this deployment. The scene and ending below are hand written examples for this genre so the page still demonstrates the experience.
+            </p>
+          </div>
+        )}
         {scenes.length > 0 && (
           <section className="mt-8 space-y-8">
             {scenes.map((s) => (
@@ -445,7 +566,7 @@ export default function StorytellerPage() {
             </p>
             <p>
               State persists in localStorage so you can close the tab and come
-              back. The Groq key never leaves your browser. JSON parse failures
+              back. No setup needed, the Groq call runs through a server route. JSON parse failures
               are surfaced clearly rather than swallowed because portfolio
               demos should fail loudly.
             </p>

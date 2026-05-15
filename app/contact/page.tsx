@@ -7,7 +7,7 @@
  * email submissions without requiring a backend. To set up:
  *
  * 1. Visit https://web3forms.com
- * 2. Enter kdjsplash@gmail.com in the "Get your free Access Key" field
+ * 2. Enter kerrydean81@gmail.com in the "Get your free Access Key" field
  * 3. Click "Create Access Key"
  * 4. Check your email for the access key
  * 5. In Vercel project settings, add a new environment variable:
@@ -16,16 +16,18 @@
  * 6. Redeploy the site
  *
  * The form includes honeypot protection (botcheck field) and sends all
- * submissions directly to kdjsplash@gmail.com via Web3Forms API.
+ * submissions directly to kerrydean81@gmail.com via Web3Forms API.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
+import { useAnalytics } from '../../lib/analytics';
 
 interface FormData {
   name: string;
   email: string;
   company: string;
+  topic: string;
   message: string;
   botcheck: string;
 }
@@ -36,10 +38,12 @@ interface FormState {
 }
 
 export default function ContactPage() {
+  const { capture, captureContactFormSubmitted } = useAnalytics();
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     company: '',
+    topic: '',
     message: '',
     botcheck: ''
   });
@@ -48,7 +52,29 @@ export default function ContactPage() {
 
   const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Pre select the topic dropdown from a ?topic=Coaching style query param.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const topic = params.get('topic');
+    const allowed = [
+      'Hire me',
+      'Contract work',
+      'Repo question',
+      'Coaching',
+      'AI pivot',
+      'Collaboration',
+      'Speaking',
+      'Other'
+    ];
+    if (topic && allowed.includes(topic)) {
+      setFormData((prev) => ({ ...prev, topic }));
+    }
+  }, []);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -84,14 +110,17 @@ export default function ContactPage() {
           name: formData.name,
           email: formData.email,
           company: formData.company,
+          topic: formData.topic,
           message: formData.message,
-          subject: `Portfolio inquiry from ${formData.name}`
+          subject: `[${formData.topic || 'Portfolio inquiry'}] from ${formData.name}`
         })
       });
 
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
+
+      captureContactFormSubmitted(formData.topic || 'unspecified');
 
       setFormState({
         status: 'success',
@@ -102,11 +131,13 @@ export default function ContactPage() {
         name: '',
         email: '',
         company: '',
+        topic: '',
         message: '',
         botcheck: ''
       });
     } catch (error) {
-      const emailUser = 'kdjsplash';
+      capture('contact_form_error', { topic: formData.topic });
+      const emailUser = 'kerrydean81';
       const emailDomain = 'gmail.com';
       setFormState({
         status: 'error',
@@ -192,6 +223,31 @@ export default function ContactPage() {
                 className="w-full px-4 py-3 rounded-lg border border-[var(--rule)] bg-[var(--bg)] text-[var(--fg)] placeholder-[var(--muted)] focus:outline-none focus:border-[var(--accent)] transition-colors"
                 placeholder="Your company"
               />
+            </div>
+
+            {/* Topic dropdown */}
+            <div>
+              <label htmlFor="topic" className="block font-mono text-xs uppercase tracking-widest text-[var(--muted)] mb-2">
+                What's this about? *
+              </label>
+              <select
+                id="topic"
+                name="topic"
+                value={formData.topic}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-lg border border-[var(--rule)] bg-[var(--bg)] text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] transition-colors appearance-none"
+              >
+                <option value="">Pick a topic</option>
+                <option value="Hire me">Hire me. Full time Software Engineer role.</option>
+                <option value="Contract work">Contract or freelance project.</option>
+                <option value="Repo question">Question about a specific repo or project.</option>
+                <option value="Coaching">Track and field or speed and endurance coaching.</option>
+                <option value="AI pivot">Help pivoting into AI engineering.</option>
+                <option value="Collaboration">Collaboration or partnership.</option>
+                <option value="Speaking">Speaking, podcast, or interview.</option>
+                <option value="Other">Something else.</option>
+              </select>
             </div>
 
             {/* Message */}

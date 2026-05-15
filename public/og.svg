@@ -17,9 +17,9 @@
   <circle cx="270" cy="315" r="184" fill="none" stroke="#A67340" stroke-width="3"/>
   <line x1="530" y1="135" x2="670" y2="135" stroke="#A67340" stroke-width="3"/>
   <text x="530" y="180" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="3" fill="#8a8a85" font-weight="500">KERRY DEAN JR.</text>
-  <text x="530" y="300" font-family="Newsreader, Georgia, serif" font-size="92" font-weight="500" fill="#1F1B15">AI Engineer.</text>
+  <text x="530" y="300" font-family="Newsreader, Georgia, serif" font-size="92" font-weight="500" fill="#1F1B15">Software Engineer.</text>
   <text x="530" y="370" font-family="Newsreader, Georgia, serif" font-size="40" font-weight="500" fill="#A67340">Production AI systems.</text>
   <text x="530" y="455" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">RAG, agents, evaluation. Nine plus years.</text>
-  <text x="530" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">Available for senior AI Engineer roles.</text>
+  <text x="530" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">Available for senior Software Engineer roles.</text>
   <text x="1130" y="580" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#8a8a85" letter-spacing="2">KERRYDEAN-HUB.VERCEL.APP</text>
 </svg>

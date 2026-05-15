@@ -97,7 +97,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     slug: "n8n-workflow-library",
     title: "n8n Agentic Workflow Library",
     tagline:
-      "291 production agentic workflows across 41 packs. Battle tested patterns for retrieval, agents, and the unsexy edges in between.",
+      "Production agentic workflow patterns for retrieval, agents, and the unsexy edges in between.",
     chips: ["n8n", "Agentic", "OpenAI", "Anthropic", "Pinecone", "Slack"],
     links: [
       {
@@ -115,7 +115,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The library is organized as 41 packs, each pack containing a small family of workflows that solve a single problem class. There is a pack for retrieval (lexical, dense, hybrid, with and without reranking), a pack for tool using agents (single step, multi step, with retries, with structured output validation), a pack for the unsexy gateway problems (idempotent webhooks, dead letter queues, replay, batched writes), a pack for evaluation harnesses, and so on. Inside each pack the workflows progress from minimal through production grade, so that a reader can study the difference between the educational version and the operational one.",
       "Every workflow ships with three artifacts. The first is the n8n workflow JSON itself, importable into a fresh installation. The second is a README that explains the problem the workflow solves, the design decisions encoded in it, and the observable failure modes that an operator should expect. The third is a fixture pack that the validation tests use, so that a contributor changing the workflow can immediately see whether they broke the contract the workflow was promising. The contract is the thing that distinguishes a production workflow from a demo workflow.",
       "I wrote the workflows from a strong opinion. Tool calling agents always validate the model output against a schema before acting on it; an agent that hands a bad JSON object to the next stage is an agent that produces incidents in the middle of the night. Retrieval workflows always carry citation provenance through to the final answer. Webhook ingestion always has an idempotency key strategy and a documented dead letter path. Evaluation workflows always store the score against a fixture identifier and a workflow version, so that score deltas across runs are meaningful. These opinions are documented in the per pack READMEs so a reader can disagree with them and choose differently if they want.",
-      "The library also includes the marketing and documentation infrastructure for the packs. Listing copy is generated programmatically from the per workflow READMEs, which means a new workflow becomes a new listable product with no separate copy work. The same pipeline that backs my Gumroad and Etsy stores backs the public showcase repository.",
+      "The library also includes the marketing and documentation infrastructure for the packs. Listing copy is generated programmatically from the per workflow READMEs, which means a new workflow becomes a new listable product with no separate copy work. The same pipeline backs the public showcase repository.",
     ],
     architecture: {
       intro: [
@@ -130,9 +130,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     F[Test runner] --> A
     F --> G[CI pipeline]
     A --> H[Listing copy generator]
-    H --> I[Gumroad listing]
-    H --> J[Etsy listing]
-    H --> K[Public showcase]`,
+    H --> I[KDP listing]
+    H --> J[Public showcase]`,
         caption: "Pack as the unit of distribution. Tests, fixtures, and listing copy generated from the same source.",
       },
       after: [
@@ -140,67 +139,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       ],
     },
     outcome: [
-      "291 workflows across 41 packs. The library is the most accessible entry point I have for the patterns I rely on in production. It has been a useful artifact in conversations with potential employers because it is concrete: this is what I think production agentic work looks like, and here are 291 examples of it. The listing copy generator is now the same machinery I use for several of my digital products, and the marginal cost of adding another pack is closer to a working day than a working week.",
+      "The library is the most accessible entry point I have for the patterns I rely on in production. It has been a useful artifact in conversations with potential employers because it is concrete: this is what I think production agentic work looks like, here are the patterns in code. The listing copy generator is now the same machinery I use for several of my digital products, and the marginal cost of adding another pack is closer to a working day than a working week.",
       "The library is also a debugging substrate. When I am building a custom n8n workflow for a specific customer, I almost always start by importing one of the packs and modifying it, rather than starting from a blank canvas. The patterns are stable enough that the customer specific work concentrates on the parts that genuinely differ, not on the rebuilding of the standard scaffolding around them.",
     ],
     next: [
-      "The next direction is consolidation. 291 workflows across 41 packs is wide; the next iteration should pick a smaller set of foundational packs, deepen them with more variations and richer documentation, and demote the long tail packs that exist mostly because I built them for one off needs. I would also like to integrate the library with the MCP RAG starter and the Claude skill suite, so that a reader can move between the n8n version, the Python MCP server version, and the Claude Agent SDK skill version of the same pattern.",
-    ],
-  },
-
-  "ivy-offline-toolkit": {
-    slug: "ivy-offline-toolkit",
-    title: "Ivy Offline Eval Toolkit",
-    tagline:
-      "A reproducible evaluation harness for LLM features that have to ship under safety guarantees.",
-    chips: ["Eval", "Python", "Rubrics", "Offline", "Pytest"],
-    links: [
-      {
-        label: "View repo on GitHub",
-        href: "https://github.com/whodeanie/ivy-offline-toolkit",
-        external: true,
-      },
-    ],
-    problem: [
-      "Evaluation is the part of an LLM project that gets cut first. The product team agrees the feature should not regress on safety, the engineering team agrees an evaluation suite is the right way to enforce that, and then the suite never gets built because shipping the feature is more visible than shipping the gate that protects it. The team flies blind, ships a model change, and finds out three weeks later from a customer that the feature now refuses to answer questions it used to handle. The whole industry has lived this loop more than once.",
-      "Online evaluation (running real traffic against the model and measuring the outcome) has its place but it is too slow and too risky to be the only signal. By the time the online numbers move, the regression is already in front of users. Offline evaluation against a fixture set, run on every change, is the gate that catches the regression before it ships. The hard part is that an offline evaluation is only useful if it is reproducible, well calibrated, and easy enough to extend that the team actually maintains it.",
-      "The Ivy assistant project needed an evaluation toolkit that a non engineer could read. The rubrics had to be portable across model and prompt changes. The fixtures had to be versioned alongside the prompts they evaluated. The output had to surface failures in a form that a domain reviewer could actually act on, not just a number that went down.",
-    ],
-    approach: [
-      "The toolkit centers on three primitives. A fixture is a question, a reference answer, and a set of metadata that describes what the question is testing. A rubric is a scoring function that takes a fixture and a model response and produces one or more scores along named dimensions. A scaffold is a small Python module that ties a model, a prompt template, and a rubric set together into a runnable evaluation. Everything else in the toolkit is plumbing around those three.",
-      "Rubrics are intentionally portable. A safety rubric measures the same thing whether the model under test is the production prompt, an experimental prompt, or an entirely different model. Rubrics live as standalone Python modules that can be imported into any scaffold, which means an evaluation suite for a new feature is mostly a question of selecting the right rubrics rather than authoring new ones from scratch. The library of rubrics is itself the deliverable that compounds across projects.",
-      "The CSV export pipeline is the part that domain reviewers actually use. Every evaluation run produces a CSV that lists every fixture, every dimension, every score, and the model output that earned the score. A clinician or a product manager can open the CSV in a spreadsheet, sort by score, and see exactly where the model failed. The failure cases drive the next round of fixture authoring, which is how the suite gets stronger over time.",
-      "I rejected the temptation to build a dashboard. Dashboards are appealing because they look like the output of a serious evaluation effort, but they live separately from the engineering workflow. CSVs and pull request comments live in the same place the engineer is already working, which is the place the evaluation has to gate.",
-    ],
-    architecture: {
-      intro: [
-        "A scaffold is the unit of evaluation. The scaffold defines the model, the prompt template, the rubric set, and the fixture set. Running the scaffold dispatches the fixtures through the model, scores the results, writes the per fixture rows to a CSV, and emits a summary report. The summary report is the artifact that gets posted on a pull request.",
-      ],
-      diagram: {
-        source: `flowchart TB
-    A[Fixtures] --> B[Scaffold]
-    C[Prompt template] --> B
-    D[Model adapter] --> B
-    E[Rubric set] --> B
-    B --> F[Per fixture run]
-    F --> G[Model output]
-    G --> H[Rubric scoring]
-    H --> I[CSV export]
-    H --> J[Summary report]
-    I --> K[Domain reviewer]
-    J --> L[Pull request comment]`,
-        caption: "Scaffold composes fixtures, prompt, model, and rubrics. Output goes to a CSV for review and a summary for the engineer.",
-      },
-      after: [
-        "The plumbing matters. Every run records the fixture version, the prompt version, the model identifier, and the rubric version, so two CSVs from different runs can be diffed meaningfully. Reproducibility is enforced at the seed level for any rubric that touches a stochastic process. The scaffolds are configured with a small Python file rather than a config language, because Python lets a scaffold author write the helper functions they need inline without leaving the file. The toolkit treats the scaffold as the boundary that should be obvious, not the boundary that should be flexible.",
-      ],
-    },
-    outcome: [
-      "The toolkit became the gate that the Ivy team relied on for prompt and model changes. Several regressions that would have shipped to users got caught at the pull request level instead, which is the actual point of the exercise. The CSV based review pattern turned out to be the unlock for non engineer involvement. Domain reviewers who would not have engaged with a dashboard happily worked through CSVs sorted by score, and the fixture set grew faster as a result.",
-      "The toolkit also worked as documentation. A new engineer joining the project could read a scaffold and understand what the team thought safety meant for that feature, what the model was supposed to refuse, what the model was supposed to cite. The scaffolds became the canonical specification for behavior, which is the right place for that specification to live.",
-    ],
-    next: [
-      "The next iteration adds richer statistical treatment to the summary report. Single point comparisons are useful but they hide variance, and a model that is noisy can look like a regression that is not. Bootstrapped confidence intervals over multiple runs would make the gate more honest. I would also like to ship a small library of rubric authoring helpers, because the friction in growing the suite is in the rubric layer rather than in the fixture layer.",
+      "The next direction is consolidation. The current library is wide; the next iteration should pick a smaller set of foundational packs, deepen them with more variations and richer documentation, and demote the long tail packs that exist mostly because I built them for one off needs. I would also like to integrate the library with the MCP RAG starter and the Claude skill suite, so that a reader can move between the n8n version, the Python MCP server version, and the Claude Agent SDK skill version of the same pattern.",
     ],
   },
 
@@ -281,7 +224,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     title: "Claude Skill Suite",
     tagline:
       "Five production Claude Agent SDK skills that ship real digital products to live storefronts.",
-    chips: ["Claude Agent SDK", "Anthropic", "Python", "KDP", "Etsy", "Gumroad"],
+    chips: ["Claude Agent SDK", "Anthropic", "Python", "KDP"],
     links: [
       {
         label: "View kernel template on GitHub",
@@ -289,20 +232,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         external: true,
       },
       {
-        label: "Visit Paperloom Studio",
-        href: "https://kerryaiperson.gumroad.com",
-        external: true,
-      },
+
     ],
     problem: [
       "Productized agentic workflows have a starter problem. The user wants to ship something, the model is capable of helping, but the gap between a clever Claude conversation and a working production pipeline is the part nobody talks about. Building a Claude Agent SDK skill that ships a real digital product means writing the deterministic scaffolding around the model, building the API integrations to the marketplaces, handling the metadata and the cover art and the listing copy, and gating it all with validation steps that catch the dumb failures before they reach a customer. The first skill is interesting. The fifth one is the test of whether the patterns generalize.",
-      "I wanted a family of skills that shared a kernel. Each skill should solve a real productization problem (puzzle book publishing, coloring book publishing, KDP browser automation, Etsy storefront automation, niche information PDF generation), and each skill should be different enough that the kernel had to be tested against real variation. If five independent skills could be built on the same scaffold, the scaffold was correct.",
+      "I wanted a family of skills that shared a kernel. Each skill should solve a real productization problem (puzzle book publishing, coloring book publishing, KDP browser automation, niche information PDF generation), and each skill should be different enough that the kernel had to be tested against real variation. If four independent skills could be built on the same scaffold, the scaffold was correct.",
       "The motivating constraint was simple: the suite had to ship products to live storefronts, not just generate artifacts on disk. Live revenue is the test of whether the pipeline survives the messy reality of marketplace APIs, file format quirks, image generation latency, and whatever other edges the skill encounters when it actually runs. A pipeline that produces something nobody buys is theatre.",
     ],
     approach: [
       "The deterministic scaffold plus LLM hybrid pattern runs through every skill. The scaffold owns the parts where correctness matters and predictability is the deliverable: file naming, metadata schemas, cover layout, marketplace API calls, idempotency keys, retry policies. The LLM owns the parts where creative variation is the deliverable: niche discovery, theme selection, listing copy, interior content. The boundary between scaffold and LLM is explicit. A skill that loses track of which side owned a decision is a skill that produces inconsistent products.",
       "Validation gates live between every stage. The skill produces a manifest at each stage, the manifest is validated against a schema, and the next stage refuses to run if the manifest is malformed. This is the part that turns a clever skill into a reliable one. A pipeline that never validates its intermediate outputs eventually produces a coloring book with the wrong title on the wrong cover, and that error costs money to refund. The validation gates make those errors loud rather than silent.",
-      "Each skill ships with a small library of templates, prompts, and validation schemas that are skill specific. The scaffold (in the kernel template repository) is the shared substrate. The skill itself is the layer on top that knows how to publish a coloring book or list an Etsy storefront. New skills slot into the same shape. The marginal cost of a sixth skill is closer to a working day than a working week, which is the cost ratio that makes the pattern worth the up front investment.",
+      "Each skill ships with a small library of templates, prompts, and validation schemas that are skill specific. The scaffold (in the kernel template repository) is the shared substrate. The skill itself is the layer on top that knows how to publish a coloring book or generate a niche PDF. New skills slot into the same shape. The marginal cost of a fifth skill is closer to a working day than a working week, which is the cost ratio that makes the pattern worth the up front investment.",
       "Browser automation lives at the edges. Some marketplaces (Amazon KDP) do not have public APIs at the granularity the skill needs. The KDP skill therefore drives a real browser session, waits for navigations, fills forms, uploads files, and verifies the resulting listing state by reading the rendered page back. This is fragile in the way that browser automation is always fragile, and the skill survives by treating every browser interaction as retryable, every assertion as explicit, and every failure as visible enough that the operator can debug it from the logs.",
     ],
     architecture: {
@@ -340,7 +280,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       ],
     },
     outcome: [
-      "The suite has produced fifty plus digital products live on Gumroad, Etsy, and Amazon KDP. The marginal cost of a new product run is small enough that I can experiment with niches I would not otherwise have time for. The validation gates have caught real failures: malformed metadata, broken cover assets, listing copy that mismatched the interior. None of those failures reached a customer, which is the test of whether the gates were worth their complexity.",
+      "The suite has produced fifty plus digital products live on Amazon KDP. The marginal cost of a new product run is small enough that I can experiment with niches I would not otherwise have time for. The validation gates have caught real failures: malformed metadata, broken cover assets, listing copy that mismatched the interior. None of those failures reached a customer, which is the test of whether the gates were worth their complexity.",
       "The kernel template is now the starting point for every new skill in my own portfolio. It is the artifact I am most likely to recommend to another engineer building productized agentic workflows, because it concentrates the patterns that matter and lets the skill specific layer focus on the parts that genuinely differ between products.",
     ],
     next: [
@@ -408,6 +348,64 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     next: [
       "If I had this project to do over, I would invest more up front in the evaluation harness. The system worked, but the gates that would have caught a regression in model behavior across a release were thinner than they should have been. A federal AI system needs the offline evaluation suite as a first class deliverable, not as something the team writes when there is time. That lesson is the one that informs the Ivy offline toolkit work directly.",
+    ],
+  },
+
+  "track-meet-tracker": {
+    slug: "track-meet-tracker",
+    title: "Track Meet Tracker",
+    tagline:
+      "A fan facing schedule for elite track and field. The ESPN style what is on tonight surface the sport never had.",
+    chips: ["Next.js 15", "TypeScript", "Groq", "Llama 3.3", "iCal", "Track & Field"],
+    links: [
+      {
+        label: "View repo on GitHub",
+        href: "https://github.com/whodeanie/track-meet-tracker",
+        external: true,
+      },
+    ],
+    problem: [
+      "Fans of professional and college football have ESPN. Fans of basketball have League Pass. Fans of track and field have an inbox full of newsletter spoilers and a USATF events page that reads like a directory of conference rooms. There is no surface that tells a casual fan which meets are on tonight, where to watch them, and which athletes are worth showing up for. The result is a sport whose audience misses meets they would have happily watched, because nobody is telling them in a way that respects their time.",
+      "The closest existing surfaces fail in different ways. TFRRS has comprehensive NCAA logistics but the UX is built for coaches and meet directors, not for fans. The Diamond League site only covers Diamond League. World Athletics covers Continental Tour Gold but not the US college and pro circuit. FloTrack covers most of it but locks the answer behind a paywall and a content marketing wrapper that the casual fan never opens. None of these surfaces are doing anything wrong inside their own scope. They are just not the answer to the question a casual fan is actually asking.",
+      "Success looks like this. A fan opens the home page, sees what is on this week and next week sorted by date, with broadcast info that flags free options first. They can filter by tier when they only care about a slice of the sport. They can click a meet for the broadcast logistics, marquee athletes, and event schedule. They can subscribe an iCal feed once and stop missing meets forever.",
+    ],
+    approach: [
+      "The data model is a single TypeScript file checked into the repository. The reason it is not a scraped pipeline is that NCAA, USATF, Diamond League, and World Athletics each change their page layouts often enough that any naive scraper would break within months. Keeping the data as a committed file means the site survives source site changes, stays on the Vercel free tier, and gives a maintainer a single place to fix bad broadcast info with a pull request. A weekly refresh script prints a checklist of source URLs, which is the operationally honest version of the same idea. Automation is possible later when the source surfaces stabilize, but a checklist is what works today.",
+      "The lead view splits upcoming meets into This Week, Next Week, and Upcoming buckets, with filter chips by tier on top. Each meet renders as a card with date, location, tier badge, a one sentence editorial summary, and the first few broadcast options. Free options carry a green outline so the eye finds them first, because the entire premise of the surface is making the casual fan succeed at watching, and the lowest friction path is a free option they did not know existed.",
+      "The detail page covers broadcast logistics, schedule of marquee events within the meet, athletes worth watching, and the official meet page link. Free broadcasts render in a distinct block above paid options. Each meet exposes a single meet iCal feed at /api/calendar/[slug] for fans who only want one event on their calendar, and the full feed lives at /api/calendar.ics. The iCal path is preferred over email notifications because every phone and laptop calendar app already supports it, and the operational cost is zero.",
+      "The AI weekly brief is a Groq Llama 3.3 70B paragraph that summarises the next two weeks in voice forward prose. The endpoint runs server side and the visitor never provides a key. The system prompt insists on 80 to 120 words, no dashes, no inventing athletes that did not appear in the data, and a tone that sounds like an informed friend who watches everything. When the GROQ_API_KEY is unset, the endpoint returns an off flag and the UI silently hides the brief. The rest of the site keeps working.",
+    ],
+    architecture: {
+      intro: [
+        "One TypeScript data file, four rendering surfaces, two API routes. Static at build time, refreshed weekly via a manual script. The whole stack runs on the Vercel free tier with no database.",
+      ],
+      diagram: {
+        source: `flowchart TB
+    A[src/data/meets.ts] --> B[lib/meets helpers]
+    B --> C[Home page buckets]
+    B --> D[Meet detail page]
+    B --> E[iCal builder]
+    E --> F[GET /api/calendar.ics]
+    E --> G[GET /api/calendar/slug]
+    B --> H[POST /api/groq/chat]
+    H --> I[Groq Llama 3.3 70B]
+    J[scripts/refresh-meets.ts] -.->|weekly checklist| A
+    C --> K[Fan]
+    D --> K
+    F --> L[Calendar app subscription]
+    G --> L`,
+        caption: "Static data file, derived views, free iCal feed, optional server side AI brief.",
+      },
+      after: [
+        "The unsexy parts are where the operational simplicity lives. Cache control headers on the iCal endpoint set a twelve hour s-maxage so calendar apps that poll aggressively do not cost anything. The detail pages are statically generated at build time via generateStaticParams, so the production hot path is a CDN read with no runtime cost. The Groq endpoint returns the off flag instead of an error when the key is missing, so a fork without the key still ships a working site. The data file refresh is a checklist, not a scraper, which is the right call for a project where source layouts change more often than the underlying meet calendar.",
+      ],
+    },
+    outcome: [
+      "The site fills a gap that the sport's existing surfaces do not. Casual fans get the answer to what is on tonight in one glance. Power fans get a calendar feed they can subscribe to once and stop thinking about. Coaches and meet directors get a clean place to point athletes and parents who want to follow along. The whole stack runs on Vercel free tier with no database, so the operational cost is zero indefinitely.",
+      "The iCal feed is the most underrated part. Every phone and laptop calendar app already supports the subscription protocol. The cost of building a notification path that respects user permission, survives platform changes, and works across iOS, Android, macOS, and Windows is zero when you delegate to the calendar app the user already trusts. Building a custom notification path would have been weeks of work for an outcome the fan likes less.",
+    ],
+    next: [
+      "The next iteration adds athlete entry lists for the major meets, pulled from World Athletics where they publish them and from TFRRS for NCAA championships. The data file scales to that addition without a schema change because each meet already carries a marquee athlete array. A weekly digest via Resend free tier is the obvious add when the audience exists to justify it. A past results archive is the natural place for the data file to grow once the upcoming window outgrows thirty days, at which point the file is going to want to split into seasonal partitions.",
     ],
   },
 };

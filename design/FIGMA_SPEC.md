@@ -168,7 +168,7 @@ content column. Each win uses `body/sm`.
 
 * Container: max width 720, centered, 96 top padding
 * Eyebrow label: "Kerry Dean Jr." in label/xs, fg/muted
-* Headline: "Applied AI Engineer." display/h1
+* Headline: "Software Engineer." display/h1
 * Pitch: body/lg, max width 60ch, fg/primary at 85%
   > Sentence: "I ship production AI systems that move real money. Available for senior Applied AI roles."
 * CTA row: 3 buttons, 12px gap. "Email me" (primary), "GitHub" (secondary), "Resume PDF" (secondary)

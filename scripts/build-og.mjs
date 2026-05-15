@@ -51,10 +51,10 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   ${portraitBlock}
   <line x1="${TEXT_X}" y1="135" x2="${TEXT_X + 140}" y2="135" stroke="#A67340" stroke-width="3"/>
   <text x="${TEXT_X}" y="180" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="3" fill="#8a8a85" font-weight="500">KERRY DEAN JR.</text>
-  <text x="${TEXT_X}" y="300" font-family="Newsreader, Georgia, serif" font-size="92" font-weight="500" fill="#1F1B15">AI Engineer.</text>
+  <text x="${TEXT_X}" y="300" font-family="Newsreader, Georgia, serif" font-size="92" font-weight="500" fill="#1F1B15">Software Engineer.</text>
   <text x="${TEXT_X}" y="370" font-family="Newsreader, Georgia, serif" font-size="40" font-weight="500" fill="#A67340">Production AI systems.</text>
   <text x="${TEXT_X}" y="455" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">RAG, agents, evaluation. Nine plus years.</text>
-  <text x="${TEXT_X}" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">Available for senior AI Engineer roles.</text>
+  <text x="${TEXT_X}" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#1F1B15" opacity="0.75">Available for senior Software Engineer roles.</text>
   <text x="${W - 70}" y="${H - 50}" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#8a8a85" letter-spacing="2">KERRYDEAN-HUB.VERCEL.APP</text>
 </svg>`;
 

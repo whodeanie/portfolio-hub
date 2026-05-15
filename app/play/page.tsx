@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Play. Kerry Dean Jr. AI Engineer",
+  title: "Play. Kerry Dean Jr. Software Engineer",
   description:
     "Small browser games that double as portfolio talking points. Wordle with AI hints, perfect tic tac toe with commentary, choose your own adventure storyteller.",
   alternates: { canonical: "/play" },
@@ -51,13 +51,24 @@ const DEMOS: Demo[] = [
     badge: "Game",
   },
   {
+    title: "Sports Trivia",
+    href: "/play/sports-trivia/",
+    tagline: "16 sports, 10 questions, 6 second timer. Live AI generated questions.",
+    bullets: [
+      "Single Groq batch call generates all 10 questions per round",
+      "Speed bonus per correct answer up to 50, plus per sport high score",
+      "Baked fallback question pack keeps the game playable when Groq is down",
+    ],
+    badge: "Game",
+  },
+  {
     title: "Word search generator",
     href: "https://github.com/whodeanie/claude-skill-template",
     external: true,
     tagline: "Procedural word search PDF generator (Claude Skill).",
     bullets: [
       "Theme picking, grid generator, deterministic layout",
-      "Used to ship Etsy and KDP products",
+      "Used to ship KDP products",
       "Source in the claude-skill-template kernel",
     ],
     badge: "Demo",
@@ -81,7 +92,7 @@ const DEMOS: Demo[] = [
     bullets: [
       "Symmetry group sampling",
       "SVG output that prints clean at letter size",
-      "Powers a portion of the KerryPaperCo storefront",
+      "Feeds the coloring book pipeline that publishes to KDP",
     ],
     badge: "Demo",
   },

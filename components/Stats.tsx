@@ -1,8 +1,8 @@
 const STATS = [
-  { value: "291", label: "n8n workflows shipped" },
-  { value: "8+", label: "books published on KDP" },
-  { value: "31+", label: "public GitHub repos" },
   { value: "9+", label: "years shipping production" },
+  { value: "30+", label: "public GitHub repos" },
+  { value: "HIPAA", label: "shipped inside regulated boundaries" },
+  { value: "Live", label: "products in market today" },
 ];
 
 export default function Stats() {

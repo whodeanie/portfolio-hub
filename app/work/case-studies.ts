@@ -223,7 +223,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     slug: "claude-skill-suite",
     title: "Claude Skill Suite",
     tagline:
-      "Five production Claude Agent SDK skills that ship real digital products to live storefronts.",
+      "Four production Claude Agent SDK skills that ship real digital products to Amazon KDP.",
     chips: ["Claude Agent SDK", "Anthropic", "Python", "KDP"],
     links: [
       {
@@ -231,11 +231,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
         href: "https://github.com/whodeanie/claude-skill-template",
         external: true,
       },
-      {
-
     ],
     problem: [
-      "Productized agentic workflows have a starter problem. The user wants to ship something, the model is capable of helping, but the gap between a clever Claude conversation and a working production pipeline is the part nobody talks about. Building a Claude Agent SDK skill that ships a real digital product means writing the deterministic scaffolding around the model, building the API integrations to the marketplaces, handling the metadata and the cover art and the listing copy, and gating it all with validation steps that catch the dumb failures before they reach a customer. The first skill is interesting. The fifth one is the test of whether the patterns generalize.",
+      "Productized agentic workflows have a starter problem. The user wants to ship something, the model is capable of helping, but the gap between a clever Claude conversation and a working production pipeline is the part nobody talks about. Building a Claude Agent SDK skill that ships a real digital product means writing the deterministic scaffolding around the model, building the API integrations to the marketplaces, handling the metadata and the cover art and the listing copy, and gating it all with validation steps that catch the dumb failures before they reach a customer. The first skill is interesting. The fourth one is the test of whether the patterns generalize.",
       "I wanted a family of skills that shared a kernel. Each skill should solve a real productization problem (puzzle book publishing, coloring book publishing, KDP browser automation, niche information PDF generation), and each skill should be different enough that the kernel had to be tested against real variation. If four independent skills could be built on the same scaffold, the scaffold was correct.",
       "The motivating constraint was simple: the suite had to ship products to live storefronts, not just generate artifacts on disk. Live revenue is the test of whether the pipeline survives the messy reality of marketplace APIs, file format quirks, image generation latency, and whatever other edges the skill encounters when it actually runs. A pipeline that produces something nobody buys is theatre.",
     ],

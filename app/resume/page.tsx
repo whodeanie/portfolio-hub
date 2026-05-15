@@ -27,9 +27,10 @@ const ROLES: Role[] = [
     summary:
       "Six month contract engagement leading engineering on Dash, Traverse's corporate travel product. Engagement ended at end of contract scope.",
     bullets: [
-      "Owned the partner integration with Choice Hotels, a high stakes booking and inventory contract. Designed the partner API contract, built availability search and booking confirmation, handled rate mapping and loyalty sync, and coordinated the phased rollout across enterprise accounts.",
-      "Shipped SSO and directory sync against Okta and Azure AD on TypeScript/React with C#/.NET services, keeping enterprise lifecycle in lockstep with airline partners and corporate identity systems.",
-      "Strengthened release safety by adding a gated CI/CD pipeline on GitHub Actions and Docker with automated tests, environment specific configs, and deployment gates that lifted developer velocity across the team.",
+      "Owned the Choice Hotels partner integration: designed the API contract, built availability search and booking confirmation, handled rate mapping and loyalty sync.",
+      "Coordinated phased rollout of the integration across enterprise accounts.",
+      "Shipped SSO and directory sync against Okta and Azure AD on TypeScript/React with C#/.NET services.",
+      "Built a gated CI/CD pipeline on GitHub Actions and Docker with automated tests and environment-specific deployment gates.",
     ],
   },
   {
@@ -40,10 +41,10 @@ const ROLES: Role[] = [
     summary:
       "Senior engineer on Luminate, the clinical copilot for senior home visits.",
     bullets: [
-      "Owned FHIR API design and implementation exchanging eligibility, claims history, and visit documentation with payer and health plan systems for care coordination across the patient journey.",
-      "Built offline first tablet sync for providers running standardized clinical assessments inside senior patient homes with unreliable connectivity, syncing back to AWS when service returned.",
-      "Implemented predictive analytics for proactive patient care inside a HIPAA compliant audit log boundary covering every model invocation and PHI access path.",
-      "Led a team of seven engineers shipping the Luminate platform end to end across .NET Entity Framework, TypeScript, Python, Firebase, and AWS.",
+      "Owned FHIR API design exchanging eligibility, claims history, and visit documentation with payer and health plan systems.",
+      "Built offline-first tablet sync for providers running clinical assessments in senior patient homes, syncing to AWS when connectivity returned.",
+      "Implemented predictive analytics for proactive patient care inside a HIPAA-compliant audit log boundary covering every model call and PHI access path.",
+      "Led a team of seven engineers shipping Luminate end to end on .NET Entity Framework, TypeScript, Python, Firebase, and AWS.",
     ],
   },
   {
@@ -54,10 +55,10 @@ const ROLES: Role[] = [
     summary:
       "Led production AI pipelines for a federal agency processing EEO complaints and procurement research at federal scale.",
     bullets: [
-      "Cut intake backlog from weeks to hours by building a document understanding pipeline that OCRs scanned forms and photographed statements via AWS Rekognition, then extracts complaint type, parties, alleged violations, and requested remedies through GPT-4 with a typed schema.",
-      "Replaced manual triage with an LLM case routing classifier that paired each queue assignment with an auditable justification reviewers could accept or reject, with citation provenance carried through every stage.",
-      "Compressed multi day procurement desk research to seconds by indexing contract databases, solicitation documents, and market reports into a vector store with chunk level citation provenance and sourced answers paired with a structured contract table.",
-      "Shipped an evidence analysis module that surfaces salient passages from emails, photos, and personnel records with citations back to the source document, eliminating the first day investigators previously spent reading supporting material.",
+      "Cut intake backlog from weeks to hours: document understanding pipeline OCR-ing scanned forms via AWS Rekognition, extracting complaint type, parties, violations, and remedies through GPT-4 with a typed schema.",
+      "Replaced manual triage with an LLM case routing classifier paired with auditable justifications, citation provenance carried end to end.",
+      "Compressed multi-day procurement research to seconds by indexing contract databases and market reports into a vector store with chunk-level citations.",
+      "Shipped an evidence analysis module surfacing salient passages from emails, photos, and personnel records with citations back to source documents.",
     ],
   },
   {
@@ -68,9 +69,9 @@ const ROLES: Role[] = [
     summary:
       "Senior engineer on global agtech analytics platforms serving real time decisions to agronomists in the field.",
     bullets: [
-      "Reduced agronomist time to field insight by shipping a satellite imagery and weather overlay dashboard on interactive maps zooming from regional view down to individual field boundaries.",
-      "Contributed reusable map, virtualized data grid, and chart components into Syngenta's open source React UI library now used across the organization.",
-      "Built backend analytics on Python, AWS Lambda, GraphQL, and DynamoDB powering real time decisions for farmers optimizing yields and managing risk.",
+      "Shipped a satellite imagery and weather overlay dashboard on interactive maps, zooming from regional view to field boundaries.",
+      "Contributed reusable map, virtualized data grid, and chart components into Syngenta's open-source React UI library.",
+      "Built backend analytics on Python, AWS Lambda, GraphQL, and DynamoDB powering real-time decisions for farmers optimizing yield and managing risk.",
     ],
   },
   {
@@ -81,9 +82,8 @@ const ROLES: Role[] = [
     summary:
       "Consulting engineer on a federal fleet electrification research project.",
     bullets: [
-      "Built Python ETL pipelines into Neo4j pulling EPA emissions data, fleet telemetry, and EIA carbon intensity feeds for graph based scenario analysis at federal research scale.",
-      "Shipped the fleet electrification modeling tool researchers used to simulate emissions impact and infrastructure requirements of transitioning fleets to electric vehicles.",
-      "Built the comparative TCO dashboard fleet managers used to build the business case for electrification under federal environmental policy goals.",
+      "Built Python ETL pipelines into Neo4j pulling EPA emissions, fleet telemetry, and EIA carbon intensity feeds for graph-based scenario analysis at federal research scale.",
+      "Shipped the fleet electrification modeling tool and comparative TCO dashboard used by federal researchers and fleet managers to plan EV transitions under federal environmental policy goals.",
     ],
   },
   {
@@ -95,8 +95,7 @@ const ROLES: Role[] = [
       "Software engineer on Enablon's sustainability and compliance platform serving global enterprise customers.",
     bullets: [
       "Shipped sustainability and compliance reporting features across the platform on React, Redux, TypeScript, Node.js, C#, AWS, and SQL Server.",
-      "Modernized legacy client deployments without breaking decade old report customizations, a careful backward compatibility exercise across enterprise tenants.",
-      "Owned complex data integrations and backend services bridging frontend surfaces and cloud resources for a global team aligning to enterprise sustainability objectives.",
+      "Modernized legacy client deployments without breaking decade-old report customizations, and owned data integrations between frontend surfaces and cloud resources for enterprise tenants.",
     ],
   },
   {
@@ -107,9 +106,8 @@ const ROLES: Role[] = [
     summary:
       "Software developer on B2B order routing apps and internal tools.",
     bullets: [
-      "Built responsive web applications on React, Redux, Angular, Java, and Bootstrap with full cross browser and mobile compatibility.",
-      "Shipped backend services on ASP.NET, C#, SQL Server, MongoDB, and PHP supporting seamless data integration across customer facing surfaces.",
-      "Translated business requirements from stakeholders into shipped software and tuned application performance with targeted optimizations.",
+      "Built responsive web apps on React, Redux, Angular, Java, and Bootstrap with full cross-browser and mobile compatibility.",
+      "Shipped backend services on ASP.NET, C#, SQL Server, MongoDB, and PHP supporting data integration across customer-facing surfaces.",
     ],
   },
 ];

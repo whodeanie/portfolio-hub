@@ -3,19 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F8F4ED;
-  --fg: #1F1B15;
-  --muted: #8a8a85;
-  --rule: #E0D7CC;
-  --accent: #A67340;
+  --bg: #09090f;
+  --fg: #f4f7fb;
+  --muted: #9ca3af;
+  --rule: #27303c;
+  --accent: #10b981;
+  --accent-2: #ec4899;
+  --accent-3: #22d3ee;
+  --panel: #111827;
 }
 
 html.dark {
-  --bg: #0a0a0a;
-  --fg: #ededed;
-  --muted: #8a8a85;
-  --rule: #1f1f1f;
-  --accent: #d4a574;
+  --bg: #09090f;
+  --fg: #f4f7fb;
+  --muted: #9ca3af;
+  --rule: #27303c;
+  --accent: #10b981;
+  --accent-2: #ec4899;
+  --accent-3: #22d3ee;
+  --panel: #111827;
 }
 
 html {
@@ -24,7 +30,14 @@ html {
 }
 
 body {
-  background: var(--bg);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 15% 0%, rgba(16, 185, 129, 0.16), transparent 30%),
+    radial-gradient(circle at 85% 10%, rgba(236, 72, 153, 0.12), transparent 28%),
+    var(--bg);
+  background-attachment: fixed;
+  background-size: 32px 32px, 32px 32px, auto, auto, auto;
   color: var(--fg);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-feature-settings: "ss01", "cv01";
@@ -62,7 +75,21 @@ a:hover {
 }
 
 .section-rule {
-  border-top: 1px solid var(--rule);
+  border-top: 2px solid var(--rule);
+}
+
+.loud-card {
+  border: 2px solid var(--rule);
+  background: color-mix(in oklab, var(--panel) 82%, transparent);
+  border-radius: 8px;
+  box-shadow: 8px 8px 0 rgba(34, 211, 238, 0.3);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.loud-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 8px 8px 0 rgba(236, 72, 153, 0.42);
 }
 
 /* Body prose. Comfortable reading rhythm on mobile and desktop. */

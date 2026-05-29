@@ -6,11 +6,13 @@ import './globals.css';
 import ThemeToggle from '../components/ThemeToggle';
 import TopNav from '../components/TopNav';
 import AnalyticsProvider from '../components/AnalyticsProvider';
+import VisitorAlert from '../components/VisitorAlert';
 
 const serif = Newsreader({
   subsets: ['latin'],
   variable: '--font-serif',
-  weight: ['400', '500', '600', '700']
+  weight: ['400', '500', '600', '700'],
+  adjustFontFallback: false
 });
 
 const sans = Inter({
@@ -27,9 +29,9 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://kerrydean-hub.vercel.app'),
-  title: 'Kerry Dean Jr. Software Engineer',
+  title: 'Kerry Dean Jr. Production AI systems and demos',
   description:
-    'Software Engineer shipping production AI systems across federal, healthcare, and enterprise. Available for senior Software Engineer roles.',
+    'Kerry Dean Jr. builds production AI systems, browser demos, workflow products, publishing automation, and open source tools.',
   keywords: [
     'Software Engineer',
     'Generative AI',
@@ -47,20 +49,20 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Kerry Dean Jr.' }],
   openGraph: {
-    title: 'Kerry Dean Jr. Software Engineer',
+    title: 'Kerry Dean Jr. Production AI systems and demos',
     description:
-      'Software Engineer shipping production AI systems. Available for senior Software Engineer roles.',
+      'Case studies, games, demos, storefronts, and repos from AI systems and product work that actually shipped.',
     url: 'https://kerrydean-hub.vercel.app',
     siteName: 'Kerry Dean Jr.',
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'Kerry Dean Jr. Software Engineer' }],
+    images: [{ url: '/headshot.jpg', width: 1740, height: 978, alt: 'Kerry Dean Jr.' }],
     locale: 'en_US',
     type: 'website'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kerry Dean Jr. Software Engineer',
-    description: 'Software Engineer shipping production AI systems.',
-    images: ['/og.png']
+    title: 'Kerry Dean Jr. Production AI systems and demos',
+    description: 'Production AI systems, browser demos, and shipped product work.',
+    images: ['/headshot.jpg']
   },
   robots: { index: true, follow: true }
 };
@@ -71,6 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Suspense fallback={null}>
           <AnalyticsProvider />
+          <VisitorAlert />
         </Suspense>
         <ThemeToggle />
         <TopNav />

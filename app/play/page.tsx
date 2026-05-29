@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Play. Kerry Dean Jr. Software Engineer",
+  title: "Play. Kerry Dean Jr. Live demos and games",
   description:
-    "Small browser games that double as portfolio talking points. Wordle with AI hints, perfect tic tac toe with commentary, choose your own adventure storyteller.",
+    "Live browser demos from Kerry Dean Jr. Wordle with AI hints, perfect tic tac toe, AI storyteller, sports trivia, RAG, and publishing tools.",
   alternates: { canonical: "/play" },
 };
 
@@ -99,9 +99,11 @@ const DEMOS: Demo[] = [
 ];
 
 export default function PlayIndex() {
+  const liveGames = DEMOS.filter((demo) => demo.badge === "Game").length;
+
   return (
-    <main className="min-h-screen px-6 sm:px-8 py-16 sm:py-24">
-      <div className="mx-auto max-w-prose">
+    <main className="min-h-screen px-6 sm:px-8 py-12 sm:py-20">
+      <div className="mx-auto max-w-7xl">
         <a
           href="/"
           className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)] hover:text-[var(--accent)]"
@@ -109,50 +111,104 @@ export default function PlayIndex() {
           ← Back to home
         </a>
 
-        <header className="mt-8">
-          <h1 className="serif text-4xl sm:text-5xl leading-[1.05] font-medium tracking-tight">
-            Play.
-          </h1>
-          <p className="mt-4 text-lg text-[var(--fg)]/80 leading-relaxed">
-            Browser games and demos. Each one is a small, self contained piece
-            of code that turns into a talking point for the algorithm or system
-            behind it. The three new games run on Groq Llama 3.3 70B.
-          </p>
+        <header className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-[var(--accent-2)]">
+              Live playground
+            </p>
+            <h1 className="mt-4 max-w-4xl text-5xl font-black leading-[0.98] tracking-tight sm:text-7xl">
+              Play the demos. Check the systems.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--fg)]/78">
+              This is the interactive side of the portfolio: browser games,
+              AI-assisted tools, and production-adjacent demos that show the
+              logic instead of hiding behind a case-study paragraph.
+            </p>
+          </div>
+
+          <figure className="loud-card p-3">
+            <img
+              src="/headshot-square.jpg"
+              alt="Kerry Dean Jr."
+              width={320}
+              height={320}
+              className="aspect-square w-full rounded-md object-cover"
+            />
+            <figcaption className="flex items-center justify-between gap-3 pt-3 font-mono text-[10px] font-bold uppercase tracking-widest">
+              <span>Kerry, not a stock hero.</span>
+              <span className="text-[var(--accent-2)]">whodeanie</span>
+            </figcaption>
+          </figure>
         </header>
 
-        <section className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {DEMOS.map((d) => (
+        <section className="mt-10 grid grid-cols-2 gap-4 border-y-2 border-[var(--rule)] py-6 sm:grid-cols-4">
+          <div>
+            <div className="text-3xl font-black text-[var(--accent)]">{liveGames}</div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+              live games
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-[var(--accent-3)]">70B</div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+              Groq model lane
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-[var(--accent-2)]">0</div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+              paywalls
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl font-black text-[var(--accent)]">ship</div>
+            <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+              then show it
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {DEMOS.map((d, index) => (
             <a
               key={d.title}
               href={d.href}
               target={d.external ? "_blank" : undefined}
               rel={d.external ? "noreferrer" : undefined}
-              className="group rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] transition-colors"
+              className="group loud-card flex min-h-[280px] flex-col p-5"
             >
               <div className="flex items-baseline justify-between gap-3">
-                <div className="serif text-lg font-medium group-hover:text-[var(--accent)]">
-                  {d.title}
-                </div>
+                <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--accent-3)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
                   {d.badge}
                 </span>
               </div>
-              <p className="mt-2 text-sm text-[var(--fg)]/70 leading-relaxed">
-                {d.tagline}
-              </p>
-              <ul className="mt-3 text-xs text-[var(--fg)]/65 leading-relaxed space-y-1">
+              <div className="mt-8">
+                <div className="serif text-2xl font-semibold leading-tight text-[var(--fg)] group-hover:text-[var(--accent)]">
+                  {d.title}
+                </div>
+                <p className="mt-3 text-sm leading-6 text-[var(--fg)]/72">
+                  {d.tagline}
+                </p>
+              </div>
+              <ul className="mt-5 space-y-2 text-xs leading-relaxed text-[var(--fg)]/68">
                 {d.bullets.map((b) => (
-                  <li key={b}>· {b}</li>
+                  <li key={b} className="flex gap-2">
+                    <span className="text-[var(--accent-2)]">/</span>
+                    <span>{b}</span>
+                  </li>
                 ))}
               </ul>
-              <div className="mt-4 font-mono text-[10px] uppercase tracking-widest text-[var(--muted)]">
+              <div className="mt-auto pt-8 font-mono text-[10px] font-bold uppercase tracking-widest text-[var(--accent)]">
                 {d.external ? "Open ↗" : "Open →"}
               </div>
             </a>
           ))}
         </section>
 
-        <footer className="mt-24 pt-10 border-t border-[var(--rule)] text-xs font-mono text-[var(--muted)] flex flex-wrap items-center justify-between gap-3">
+        <footer className="mt-20 flex flex-wrap items-center justify-between gap-3 border-t-2 border-[var(--rule)] pt-8 font-mono text-xs text-[var(--muted)]">
           <a href="/" className="hover:text-[var(--accent)]">
             ← Home
           </a>

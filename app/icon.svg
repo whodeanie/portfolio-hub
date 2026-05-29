@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="48" fill="#101214"/>
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Newsreader, Georgia, serif" font-size="148" font-weight="600" fill="#67E8F9" letter-spacing="-2">KD</text>
+  <rect width="256" height="256" rx="32" fill="#09090F"/>
+  <rect x="24" y="24" width="208" height="208" rx="18" fill="none" stroke="#22D3EE" stroke-width="8"/>
+  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, system-ui, sans-serif" font-size="132" font-weight="900" fill="#10B981" letter-spacing="-6">KD</text>
 </svg>

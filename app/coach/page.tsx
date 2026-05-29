@@ -936,7 +936,7 @@ function TechniqueTab() {
           How this works
         </h3>
         <p className="mt-3 text-xs text-[var(--fg)]/75 leading-relaxed max-w-prose">
-          One Groq Llama 3.3 70B call. Strict JSON contract. The system prompt anchors the model on real jump and sprint phases (penultimate, plant, takeoff angle, hop step ratio, drive, finish lean) and on Kerry's Iowa Hawkeyes background. Output is shaped the way a coach would write it on a printout, not the way a fitness app would.
+          One Groq Llama 3.3 70B call. Strict JSON contract. The system prompt anchors the model on real jump and sprint phases (penultimate, plant, takeoff angle, hop step ratio, drive, finish lean) and on Kerry&apos;s Iowa Hawkeyes background. Output is shaped the way a coach would write it on a printout, not the way a fitness app would.
         </p>
       </section>
     </div>
@@ -1037,7 +1037,7 @@ function AskTab() {
           Track and speed Q&amp;A.
         </h2>
         <p className="mt-3 text-sm text-[var(--fg)]/80 leading-relaxed">
-          Free text chat about jumps, sprints, and speed and endurance for any sport. Trained on Kerry's Iowa Hawkeyes background, his actual marks (long jump 7.00m, triple jump 14.84m), and standard USATF coaching wisdom. Not Kerry himself, but the closest free version.
+          Free text chat about jumps, sprints, and speed and endurance for any sport. Trained on Kerry&apos;s Iowa Hawkeyes background, his actual marks (long jump 7.00m, triple jump 14.84m), and standard USATF coaching wisdom. Not Kerry himself, but the closest free version.
         </p>
       </div>
 
@@ -1158,7 +1158,7 @@ function AskTab() {
           How this works
         </h3>
         <p className="mt-3 text-xs text-[var(--fg)]/75 leading-relaxed max-w-prose">
-          Free text chat through Groq Llama 3.3 70B. The system prompt grounds the model in Kerry's D1 Iowa Hawkeyes background as a jumper, his USATF nationals history, and standard coaching methodology (USATF Level 1, Tony Wells, Boo Schexnayder). Chat is persisted in your browser's localStorage so it survives a refresh. Nothing leaves your browser except the messages you choose to send.
+          Free text chat through Groq Llama 3.3 70B. The system prompt grounds the model in Kerry&apos;s D1 Iowa Hawkeyes background as a jumper, his USATF nationals history, and standard coaching methodology (USATF Level 1, Tony Wells, Boo Schexnayder). Chat is persisted in your browser&apos;s localStorage so it survives a refresh. Nothing leaves your browser except the messages you choose to send.
         </p>
       </section>
     </div>

@@ -6,7 +6,7 @@ import ProjectGrid from '../components/ProjectGrid';
 const products = [
   {
     name: 'KDP Author Page',
-    tagline: 'Eight plus published books on Amazon Kindle Direct Publishing.',
+    tagline: 'Published books and print systems from the same automation pipeline.',
     href: 'https://www.amazon.com/s?k=kerry+dean'
   },
   {
@@ -82,8 +82,9 @@ export default function Page() {
         </h2>
         <div className="mt-6 prose-body text-[var(--fg)]/85 leading-relaxed">
           <p>
-            Nine plus years across federal AI, healthcare AI, and agtech.
-            Currently shipping a multi product AI portfolio with live revenue.
+            Nine plus years across federal AI, healthcare AI, and agtech. I
+            build the system, ship the demo, write down the tradeoffs, and keep
+            the receipts visible.
           </p>
         </div>
         <div className="mt-6">
@@ -156,9 +157,9 @@ export default function Page() {
                 href={p.href}
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-lg border border-[var(--rule)] p-5 hover:border-[var(--accent)] hover:shadow-[0_4px_12px_rgba(166,115,64,0.1)] hover:-translate-y-0.5 transition-all"
+                className="group loud-card block p-5"
               >
-                <div className="serif text-lg font-medium group-hover:text-[var(--accent)]">
+                <div className="serif text-lg font-semibold group-hover:text-[var(--accent)]">
                   {p.name}
                 </div>
                 <div className="mt-2 text-sm text-[var(--fg)]/70 leading-relaxed">{p.tagline}</div>
@@ -182,7 +183,7 @@ export default function Page() {
             alt="Portrait of Kerry Dean Jr."
             width={224}
             height={224}
-            className="h-44 w-44 sm:h-56 sm:w-56 rounded-2xl object-cover border border-[var(--rule)] transition-all duration-200 group-hover:border-[var(--accent)] group-hover:shadow-[0_0_0_4px_rgba(166,115,64,0.12)]"
+            className="h-44 w-44 rounded-lg border-2 border-[var(--rule)] object-cover shadow-[8px_8px_0_rgba(34,211,238,0.35)] transition-all duration-200 group-hover:border-[var(--accent)] sm:h-56 sm:w-56"
           />
         </figure>
         <div className="mt-8 prose-body text-[var(--fg)]/85 leading-relaxed">

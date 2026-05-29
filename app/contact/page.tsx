@@ -228,7 +228,7 @@ export default function ContactPage() {
             {/* Topic dropdown */}
             <div>
               <label htmlFor="topic" className="block font-mono text-xs uppercase tracking-widest text-[var(--muted)] mb-2">
-                What's this about? *
+                What&apos;s this about? *
               </label>
               <select
                 id="topic"

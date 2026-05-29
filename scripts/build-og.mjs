@@ -42,28 +42,27 @@ const portraitBlock = headshotHref
     </clipPath>
   </defs>
   <image href="${headshotHref}" x="${PORTRAIT_X}" y="${PORTRAIT_Y}" width="${PORTRAIT_SIZE}" height="${PORTRAIT_SIZE}" preserveAspectRatio="xMidYMid slice" clip-path="url(#circle)"/>
-  <circle cx="${PORTRAIT_CX}" cy="${PORTRAIT_CY}" r="${PORTRAIT_R + 4}" fill="none" stroke="#0F766E" stroke-width="3"/>`
+  <circle cx="${PORTRAIT_CX}" cy="${PORTRAIT_CY}" r="${PORTRAIT_R + 4}" fill="none" stroke="#22D3EE" stroke-width="5"/>`
   : '';
 
 const TEXT_X = 530;
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#F8FAFC"/>
-      <stop offset="100%" stop-color="#E2F3F2"/>
-    </linearGradient>
-  </defs>
-  <rect width="${W}" height="${H}" fill="url(#bg)"/>
+  <rect width="${W}" height="${H}" fill="#09090F"/>
+  <path d="M0 0H1200V630H0Z" fill="none"/>
+  <g opacity="0.12">
+    <path d="M0 90H1200M0 180H1200M0 270H1200M0 360H1200M0 450H1200M0 540H1200" stroke="#FFFFFF"/>
+    <path d="M90 0V630M180 0V630M270 0V630M360 0V630M450 0V630M540 0V630M630 0V630M720 0V630M810 0V630M900 0V630M990 0V630M1080 0V630" stroke="#FFFFFF"/>
+  </g>
+  <rect x="520" y="126" width="155" height="8" fill="#EC4899"/>
   ${portraitBlock}
-  <line x1="${TEXT_X}" y1="135" x2="${TEXT_X + 140}" y2="135" stroke="#0F766E" stroke-width="3"/>
-  <text x="${TEXT_X}" y="180" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="3" fill="#8a8a85" font-weight="500">KERRY DEAN JR.</text>
-  <text x="${TEXT_X}" y="300" font-family="Newsreader, Georgia, serif" font-size="92" font-weight="500" fill="#101214">Software Engineer.</text>
-  <text x="${TEXT_X}" y="370" font-family="Newsreader, Georgia, serif" font-size="40" font-weight="500" fill="#0F766E">Production AI systems.</text>
-  <text x="${TEXT_X}" y="455" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#101214" opacity="0.75">RAG, agents, evaluation. Nine plus years.</text>
-  <text x="${TEXT_X}" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#101214" opacity="0.75">Available for senior Software Engineer roles.</text>
-  <text x="${W - 70}" y="${H - 50}" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#8a8a85" letter-spacing="2">KERRYDEAN-HUB.VERCEL.APP</text>
+  <text x="${TEXT_X}" y="180" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="3" fill="#F9A8D4" font-weight="800">KERRY DEAN JR.</text>
+  <text x="${TEXT_X}" y="285" font-family="Inter, system-ui, sans-serif" font-size="76" font-weight="900" fill="#F4F7FB">Production AI</text>
+  <text x="${TEXT_X}" y="365" font-family="Inter, system-ui, sans-serif" font-size="76" font-weight="900" fill="#F4F7FB">systems.</text>
+  <text x="${TEXT_X}" y="430" font-family="Inter, system-ui, sans-serif" font-size="34" font-weight="800" fill="#10B981">The real ones are here.</text>
+  <text x="${TEXT_X}" y="490" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#F4F7FB" opacity="0.76">Browser demos, case studies, repos, and receipts.</text>
+  <text x="${W - 70}" y="${H - 50}" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#22D3EE" letter-spacing="2">KERRYDEAN-HUB.VERCEL.APP</text>
 </svg>`;
 
 const outDir = path.resolve('public');
@@ -83,8 +82,9 @@ if (hasConvert) {
 const ICON = 256;
 const iconSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${ICON}" height="${ICON}" viewBox="0 0 ${ICON} ${ICON}">
-  <rect width="${ICON}" height="${ICON}" rx="48" fill="#101214"/>
-  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Newsreader, Georgia, serif" font-size="148" font-weight="600" fill="#67E8F9" letter-spacing="-2">KD</text>
+  <rect width="${ICON}" height="${ICON}" rx="32" fill="#09090F"/>
+  <rect x="24" y="24" width="208" height="208" rx="18" fill="none" stroke="#22D3EE" stroke-width="8"/>
+  <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, system-ui, sans-serif" font-size="132" font-weight="900" fill="#10B981" letter-spacing="-6">KD</text>
 </svg>`;
 
 const appDir = path.resolve('app');

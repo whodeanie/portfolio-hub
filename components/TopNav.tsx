@@ -19,7 +19,7 @@ export default function TopNav() {
         <Link href="/" className="serif text-lg font-medium hover:text-[var(--accent)] transition-colors">
           Kerry Dean Jr.
         </Link>
-        <ul className="flex items-center gap-5 sm:gap-7">
+        <ul className="hidden items-center gap-5 sm:gap-7 md:flex">
           {LINKS.slice(1).map((l) => (
             <li key={l.href}>
               <Link

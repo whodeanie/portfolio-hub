@@ -91,22 +91,22 @@ export default function BentoHero() {
         }
 
         .hero-bento > * {
-          border: 1px solid var(--rule);
-          border-radius: 14px;
+          border: 2px solid var(--rule);
+          border-radius: 8px;
           transition: all 200ms ease-out;
         }
 
         .hero-bento > *:hover {
           border-color: var(--accent);
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(166, 115, 64, 0.1);
+          box-shadow: 8px 8px 0 rgba(34, 211, 238, 0.3);
         }
 
         /* Tile Backgrounds */
         .tile-identity {
           grid-column: 1 / 3;
           grid-row: 1 / 3;
-          background: #FAF6EE;
+          background: var(--panel);
           position: relative;
           overflow: hidden;
         }
@@ -114,7 +114,7 @@ export default function BentoHero() {
         .tile-pitch {
           grid-column: 3 / 5;
           grid-row: 1 / 2;
-          background: #F5EFE0;
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(17, 24, 39, 0.94));
           padding: 2rem;
           display: flex;
           flex-direction: column;
@@ -124,7 +124,7 @@ export default function BentoHero() {
         .tile-shipping {
           grid-column: 5 / 7;
           grid-row: 1 / 2;
-          background: #3D5A4E;
+          background: linear-gradient(135deg, var(--accent-2), #111827 72%);
           padding: 2rem;
           display: flex;
           flex-direction: column;
@@ -135,7 +135,7 @@ export default function BentoHero() {
         .tile-project {
           grid-column: span 2;
           grid-row: auto;
-          background: #EFE7D2;
+          background: var(--panel);
           position: relative;
           overflow: hidden;
         }
@@ -143,14 +143,14 @@ export default function BentoHero() {
         .tile-stack {
           grid-column: 1 / 3;
           grid-row: 3 / 4;
-          background: #F5EFE0;
+          background: var(--panel);
           padding: 2rem;
         }
 
         .tile-play {
           grid-column: 3 / 5;
           grid-row: 3 / 4;
-          background: #FAF6EE;
+          background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(17, 24, 39, 0.94));
           padding: 2rem;
           display: flex;
           align-items: center;
@@ -160,7 +160,7 @@ export default function BentoHero() {
         .tile-contact {
           grid-column: 5 / 7;
           grid-row: 3 / 4;
-          background: #EFE7D2;
+          background: var(--panel);
           padding: 2rem;
           display: flex;
           flex-direction: column;
@@ -193,15 +193,21 @@ export default function BentoHero() {
             Kerry Dean Jr.
           </h1>
           <p className="mt-2 font-mono text-xs uppercase tracking-widest text-white/80">
-            Software Engineer · Chicago
+            Chicago · whodeanie · not a stock hero
           </p>
         </div>
       </motion.div>
 
       {/* Pitch Tile */}
       <motion.div className="tile-pitch" variants={itemVariants}>
-        <p className="serif text-2xl font-medium leading-snug text-[#1F1B15]">
-          I build AI tools, automation systems, and side businesses. Currently shipping sports and AI projects from Chicago.
+        <p className="font-mono text-xs uppercase tracking-widest text-[var(--accent-2)]">
+          Production AI systems. Real demos. Receipts.
+        </p>
+        <p className="mt-4 serif text-3xl font-semibold leading-tight text-[var(--fg)]">
+          I build production AI systems. The real ones are here.
+        </p>
+        <p className="mt-4 text-sm leading-6 text-[var(--fg)]/72">
+          Case studies, browser demos, storefronts, and repos from work that actually shipped. No mystery dashboard screenshots.
         </p>
         <Link
           href="/resume/"
@@ -214,9 +220,12 @@ export default function BentoHero() {
       {/* Currently Shipping Tile */}
       <motion.div className="tile-shipping" variants={itemVariants}>
         <div className="text-center">
-          <div className="text-5xl font-medium text-white">9</div>
+          <div className="text-5xl font-black text-white">291</div>
           <p className="mt-2 font-mono text-xs uppercase tracking-widest text-white/70">
-            Years shipping production AI
+            workflows shipped
+          </p>
+          <p className="mt-4 text-sm text-white/75">
+            Nine plus years engineering. Current work is built to run, not just screenshot.
           </p>
         </div>
       </motion.div>
@@ -235,7 +244,7 @@ export default function BentoHero() {
           <img
             src={project.image}
             alt={project.name}
-            className="w-full h-64 object-cover"
+            className="h-44 w-full object-cover object-top"
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
             <h3 className="serif text-lg font-medium text-white">{project.name}</h3>
@@ -264,7 +273,7 @@ export default function BentoHero() {
         <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--muted)] mb-4">
           Tech Stack
         </h3>
-        <p className="font-mono text-sm text-[#1F1B15]/80 leading-relaxed">
+        <p className="font-mono text-sm text-[var(--fg)]/78 leading-relaxed">
           {STACK.join(' · ')}
         </p>
       </motion.div>
@@ -275,20 +284,20 @@ export default function BentoHero() {
           href="/play/"
           className="text-center hover:text-[var(--accent)] transition-colors"
         >
-          <div className="serif text-2xl font-medium mb-2">Play</div>
+          <div className="serif text-3xl font-semibold mb-2 text-[var(--fg)]">Play</div>
           <p className="font-mono text-xs uppercase tracking-widest text-[var(--muted)]">
-            Explore interactive demos →
+            Wordle, minimax, storyteller, trivia →
           </p>
         </Link>
       </motion.div>
 
       {/* Contact Tile */}
       <motion.div className="tile-contact" variants={itemVariants}>
-        <h3 className="serif text-xl font-medium text-[#1F1B15] mb-4">
+        <h3 className="serif text-xl font-semibold text-[var(--fg)] mb-4">
           Get in touch
         </h3>
-        <p className="text-sm text-[#1F1B15]/70 mb-4">
-          24 hour response guaranteed.
+        <p className="text-sm text-[var(--fg)]/70 mb-4">
+          Builds the thing, then shows the work.
         </p>
         <Link
           href="/contact"
